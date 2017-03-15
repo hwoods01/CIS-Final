@@ -1,0 +1,12 @@
+{% extends 'trailHQ/base.html' %}
+
+{% block content %}
+
+    {% for SingletracksTrail in trails %}
+        <div class = "trail">
+            <p>{{SingletracksTrail.name}} </p>
+
+        </div>
+    {% endfor %}
+
+{% endblock %}
