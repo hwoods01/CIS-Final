@@ -2,10 +2,12 @@
 
 {% block content %}
 
-    <div class="trail">
-        <h1>{{ trail.name }}</h1>
-        <p>{{ trail.city }}</p>
-    </div>
+    {% for trail in trails %}
+        <div class="trail">
+            <h1>{{ trail.name }}</h1>
+            <p>{{ trail.city }}</p>
+        </div>
+    {% endfor %}
 
 
 
