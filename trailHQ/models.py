@@ -15,3 +15,10 @@ class SingletracksTrail(models.Model):
 
     def addTrail(self):
         self.save()
+
+
+
+class CityState(models.Model):
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=20)
+
