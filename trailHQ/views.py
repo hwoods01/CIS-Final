@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import SingletracksTrail
-#from utils import ST_Helper #THIS WILL BE USED WHEN i HAVE CALLS TO MAKE
+from trailHQ.utils.trailForks_helper import requestBuilder
 from django.http import Http404
 from django.template import RequestContext
 # Create your views here.
@@ -23,6 +23,7 @@ def trail_detail(request, pk):
 
 
 def all(request):
+    requestBuilder()
     trails =  SingletracksTrail.objects.all()
     print(trails.values())
     return render(request, 'trailHQ/all.html', {'trails': trails})
