@@ -2,7 +2,7 @@
 
 import requests
 from bs4 import BeautifulSoup
-
+from trailHQ.models import TFState, TFStateArea, TFid
 import time
 from random import randint
 
@@ -28,7 +28,7 @@ def requestBuilder():
             if (req_number != 0):
                 query = base_request + query_request
 
-            trail_list = makeRequest(query, req_number, state)
+            trail_list = makeRequest(   query, req_number, state)
 
             # if none then were out of trails for that state, which means we can move on to the next one
             if (trail_list == None):
@@ -39,7 +39,28 @@ def requestBuilder():
                 #buildTable(trail_list, state)
 
 
-#def buildTable(trails, state):
+def buildTable(trails, state):
+    dbstate = TFState(state_name= state)
+    for trail in trails:
+        area = trail[1]
+        #check if last bit is int
+            #if not put back on rest of string
+            #if is put into db as id for trail/area
+        #need to grab everything but the last off the split for this to work.
+        #put the
+        split_area = area.split('-')
+        split_trail = trail[0].split('-')
+        trail_id = tryConvert((split_trail[split_trail.length]))
+        area_id = tryConvert(split_area[split_area.length])
+        if (area_id == None):
+            areadb= TFStateArea(stateId=dbstate, riding_area=area)
+        else:
+            areadb = TFStateArea(stateId=dbstate, riding_area=trail[1], area_id=area_id )
+
+        TFid(area_id= areadb, )
+
+
+
 
 
 
@@ -77,8 +98,6 @@ def parseRequest(response, num, state):
         #with open("#{filename}.txt", 'w') as file:
             #file.write(html)
 
-
-
         soup = BeautifulSoup(html, 'html.parser')
         trails = list()
         for link in soup.find_all('tr'):
@@ -89,11 +108,14 @@ def parseRequest(response, num, state):
                 print(trail)
                 print(region)
 
-
-
-            #print(trail)
-
-            #print(link)
+                trail_split = trail.split('/')
+                region_split = region.split('/')
+                print(trail_split)
+                print(region_split)
+                trail_name = trail_split[4]
+                region_id = region_split[4]
+                trails.append((trail_name, region_id))
+        return trails
 
     except Exception as e:
         print(e)
@@ -101,9 +123,9 @@ def parseRequest(response, num, state):
 
 # Function to try converting string to int because not all TF have number id's
 def tryConvert(stringConv):
-    def RepresentsInt(s):
-        try:
-            convert = int(s)
-            return convert
-        except ValueError:
-            return None
+
+     try:
+           convert = int(stringConv)
+           return convert
+     except ValueError:
+           return None
