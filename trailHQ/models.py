@@ -15,3 +15,14 @@ class SingletracksTrail(models.Model):
 
     def addTrail(self):
         self.save()
+
+
+class MtbProjStateId(models.Model):
+    state_id = models.IntegerField(primary_key=True)
+    state_name = models.CharField(max_length=25)
+
+
+class MtbProjTrailId(models.Model):
+    trailId=models.IntegerField(primary_key=True)
+    name = models.TextField()
+    stateId=models.ForeignKey('MtbProjStateId')

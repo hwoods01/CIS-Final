@@ -3,9 +3,15 @@
 {% block content %}
 
     {% for SingletracksTrail in trails %}
-        <div class = "trail">
+        <div class = "Strail">
             <p>{{SingletracksTrail.name}} </p>
 
+        </div>
+    {% endfor %}
+
+    {% for MtbProjTrailId in mtbProj %}
+        <div class="Mtrail">
+            <p>{{MtbProjTrailId.name}}</p>
         </div>
     {% endfor %}
 
