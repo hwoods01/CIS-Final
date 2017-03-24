@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import SingletracksTrail, MtbProjTrailId
-#from utils import ST_Helper #THIS WILL BE USED WHEN i HAVE CALLS TO MAKE
+from trailHQ.utils.trailForks_helper import requestBuilder
 from django.http import Http404
 from trailHQ.utils.mtbpr_build import requestBuilder
 from django.template import RequestContext
@@ -24,11 +24,11 @@ def trail_detail(request, pk):
 
 
 def all(request):
-    ''' Uncommenting this will build more trail objects'''
-    #requestBuilder()
+
+
 
 
     trails =  SingletracksTrail.objects.all()
     mtbProj = MtbProjTrailId.objects.all()
 
-    return render(request, 'trailHQ/all.html', {'trails': trails, 'mtbProj': mtbProj})
+    return render(request, 'trailHQ/all.html', {'trails': trails})

@@ -4,9 +4,13 @@
     <list default="true" id="2f772371-52fa-48d2-afe8-88be36d30b98" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+<<<<<<< 96b3604a89e71c39014e30a084bf15c43a42cc3a
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trailHQ/models.py" afterPath="$PROJECT_DIR$/trailHQ/models.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trailHQ/templates/trailHQ/all.html" afterPath="$PROJECT_DIR$/trailHQ/templates/trailHQ/all.html" />
+=======
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trailHQ/models.py" afterPath="$PROJECT_DIR$/trailHQ/models.py" />
+>>>>>>> Started working on trailforks calls for gettign trails.
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trailHQ/views.py" afterPath="$PROJECT_DIR$/trailHQ/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -44,6 +48,7 @@
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trailHQ/views.py">
+<<<<<<< 96b3604a89e71c39014e30a084bf15c43a42cc3a
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="480">
               <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
@@ -60,20 +65,40 @@
             <state relative-caret-position="0">
               <caret line="0" column="5" lean-forward="true" selection-start-line="0" selection-start-column="5" selection-end-line="0" selection-end-column="5" />
               <folding />
+=======
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="375">
+              <caret line="25" column="20" lean-forward="true" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="20" />
+              <folding>
+                <element signature="e#0#54#0" expanded="true" />
+              </folding>
+>>>>>>> Started working on trailforks calls for gettign trails.
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< 96b3604a89e71c39014e30a084bf15c43a42cc3a
       <file leaf-file-name="base.py" pinned="false" current-in-tab="false">
         <entry file="file://$USER_HOME$/.virtualenvs/djangodev/lib/python3.5/site-packages/django/core/handlers/base.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="204">
               <caret line="184" column="0" lean-forward="false" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
               <folding />
+=======
+      <file leaf-file-name="trailForks_helper.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trailHQ/utils/trailForks_helper.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+              <folding>
+                <element signature="e#19#34#0" expanded="true" />
+              </folding>
+>>>>>>> Started working on trailforks calls for gettign trails.
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< 96b3604a89e71c39014e30a084bf15c43a42cc3a
       <file leaf-file-name="mtbpr_build.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trailHQ/utils/mtbpr_build.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -82,6 +107,14 @@
               <folding>
                 <element signature="e#19#34#0" expanded="true" />
               </folding>
+=======
+      <file leaf-file-name="samp_resp_tf.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/samp_resp_tf.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1035">
+              <caret line="5995" column="0" lean-forward="false" selection-start-line="5995" selection-start-column="0" selection-end-line="5995" selection-end-column="0" />
+              <folding />
+>>>>>>> Started working on trailforks calls for gettign trails.
             </state>
           </provider>
         </entry>
@@ -148,6 +181,29 @@
           </provider>
         </entry>
       </file>
+<<<<<<< 96b3604a89e71c39014e30a084bf15c43a42cc3a
+=======
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trailHQ/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="480">
+              <caret line="32" column="28" lean-forward="true" selection-start-line="32" selection-start-column="28" selection-end-line="32" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="1" column="5" lean-forward="false" selection-start-line="1" selection-start-column="5" selection-end-line="1" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+>>>>>>> Started working on trailforks calls for gettign trails.
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -168,17 +224,28 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+<<<<<<< 96b3604a89e71c39014e30a084bf15c43a42cc3a
+=======
+        <option value="$PROJECT_DIR$/trailHQ/templates/trailHQ/all.html" />
+>>>>>>> Started working on trailforks calls for gettign trails.
         <option value="$PROJECT_DIR$/apiReq.py" />
         <option value="$PROJECT_DIR$/trailHQ/apiReq.py" />
         <option value="$PROJECT_DIR$/trailHQ/utils/__init__.py" />
         <option value="$PROJECT_DIR$/trailHQ/utils/ST_Helper.py" />
         <option value="$PROJECT_DIR$/trailHQ/urls.py" />
         <option value="$PROJECT_DIR$/trailHQ/templates/trailHQ/trail_detail.html" />
+<<<<<<< 96b3604a89e71c39014e30a084bf15c43a42cc3a
         <option value="$PROJECT_DIR$/trailHQ/utils/generic_helper.py" />
         <option value="$PROJECT_DIR$/trailHQ/models.py" />
         <option value="$PROJECT_DIR$/trailHQ/utils/mtbpr_build.py" />
         <option value="$PROJECT_DIR$/trailHQ/templates/trailHQ/all.html" />
         <option value="$PROJECT_DIR$/trailHQ/views.py" />
+=======
+        <option value="$PROJECT_DIR$/trailHQ/utils/samp_resp_tf.txt" />
+        <option value="$PROJECT_DIR$/trailHQ/views.py" />
+        <option value="$PROJECT_DIR$/trailHQ/utils/trailForks_helper.py" />
+        <option value="$PROJECT_DIR$/trailHQ/models.py" />
+>>>>>>> Started working on trailforks calls for gettign trails.
         <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
@@ -202,7 +269,10 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+<<<<<<< 96b3604a89e71c39014e30a084bf15c43a42cc3a
       <pane id="Scope" />
+=======
+>>>>>>> Started working on trailforks calls for gettign trails.
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -285,12 +355,21 @@
           </PATH>
         </subPane>
       </pane>
+<<<<<<< 96b3604a89e71c39014e30a084bf15c43a42cc3a
+=======
+      <pane id="Scope" />
+>>>>>>> Started working on trailforks calls for gettign trails.
       <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="configurable.group.language" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
   </component>
   <component name="RunManager" selected="Python.manage">
     <configuration default="false" name="manage" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -470,7 +549,11 @@
     <frame x="0" y="0" width="1920" height="1080" extended-state="6" />
     <editor active="true" />
     <layout>
+<<<<<<< 96b3604a89e71c39014e30a084bf15c43a42cc3a
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19583334" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+=======
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2046875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+>>>>>>> Started working on trailforks calls for gettign trails.
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -500,6 +583,21 @@
           <line>14</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/trailHQ/utils/trailForks_helper.py</url>
+          <line>95</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/trailHQ/utils/trailForks_helper.py</url>
+          <line>93</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/trailHQ/utils/trailForks_helper.py</url>
+          <line>33</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -508,7 +606,11 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
+<<<<<<< 96b3604a89e71c39014e30a084bf15c43a42cc3a
       <option name="time" value="32" />
+=======
+      <option name="time" value="20" />
+>>>>>>> Started working on trailforks calls for gettign trails.
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -705,6 +807,90 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/trailsHQ/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trailHQ/templates/trailHQ/trail_detail.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="16" lean-forward="false" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trailHQ/templates/trailHQ/all.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="41" lean-forward="true" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trailHQ/utils/ST_Helper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="1" lean-forward="false" selection-start-line="4" selection-start-column="1" selection-end-line="4" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trailHQ/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="28" lean-forward="false" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trailHQ/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trailHQ/apps.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/manage.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="20" column="13" lean-forward="false" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trailsHQ/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trailHQ/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/trailHQ/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -791,6 +977,7 @@
     <entry file="file://$PROJECT_DIR$/apiReq.py" />
     <entry file="file://$PROJECT_DIR$/trailHQ/apiReq.py" />
     <entry file="file://$PROJECT_DIR$/trailHQ/utils/__init__.py">
+<<<<<<< 96b3604a89e71c39014e30a084bf15c43a42cc3a
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -805,10 +992,11 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trailHQ/apps.py">
+=======
+>>>>>>> Started working on trailforks calls for gettign trails.
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -816,7 +1004,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -846,6 +1033,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< 96b3604a89e71c39014e30a084bf15c43a42cc3a
     <entry file="file://$USER_HOME$/.virtualenvs/djangodev/lib/python3.5/site-packages/django/core/handlers/base.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -854,6 +1042,8 @@
         </state>
       </provider>
     </entry>
+=======
+>>>>>>> Started working on trailforks calls for gettign trails.
     <entry file="file://$PROJECT_DIR$/trailHQ/utils/ST_Helper.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -896,20 +1086,58 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/samp_resp_tf.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1035">
+          <caret line="5995" column="0" lean-forward="false" selection-start-line="5995" selection-start-column="0" selection-end-line="5995" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/trailHQ/views.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< 96b3604a89e71c39014e30a084bf15c43a42cc3a
         <state relative-caret-position="480">
           <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+=======
+        <state relative-caret-position="375">
+          <caret line="25" column="20" lean-forward="true" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="20" />
+>>>>>>> Started working on trailforks calls for gettign trails.
           <folding>
             <element signature="e#0#54#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< 96b3604a89e71c39014e30a084bf15c43a42cc3a
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="5" lean-forward="true" selection-start-line="0" selection-start-column="5" selection-end-line="0" selection-end-column="5" />
+=======
+    <entry file="file://$PROJECT_DIR$/trailHQ/utils/trailForks_helper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding>
+            <element signature="e#19#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trailHQ/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="32" column="28" lean-forward="true" selection-start-line="32" selection-start-column="28" selection-end-line="32" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="5" lean-forward="false" selection-start-line="1" selection-start-column="5" selection-end-line="1" selection-end-column="5" />
+>>>>>>> Started working on trailforks calls for gettign trails.
           <folding />
         </state>
       </provider>
