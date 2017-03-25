@@ -36,12 +36,14 @@ class TFState(models.Model):
     state_name = models.CharField(max_length=20)
 
 class TFStateArea(models.Model):
-    stateId= models.ForeignKey('TFState')
+    id = models.AutoField(primary_key=True)
+    stateId= models.ForeignKey(TFState)
     riding_area = models.TextField()
     area_id = models.IntegerField(default=None)
 
 class TFid(models.Model):
-    area_id = models.ForeignKey('TFStateArea')
+    id = models.AutoField(primary_key=True)
+    areaId = models.ForeignKey(TFStateArea)
     name = models.TextField()
     trail_id = models.IntegerField(default=None)
     url = models.TextField()

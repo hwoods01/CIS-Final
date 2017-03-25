@@ -1,4 +1,5 @@
 *.pyc
 *.txt
 .idea/workspace.xml
+db.sqlite3
 
