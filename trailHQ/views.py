@@ -31,6 +31,7 @@ def all(request):
 
 
 
+
     trails =  SingletracksTrail.objects.all()
     mtbProj = MtbProjTrailId.objects.all()  # requestBuilder()
     tfs = TFid.objects.all()
