@@ -15,19 +15,20 @@ import re
 #states_though_W ={"ohio":, :,"oregon":, "pennsylvania":, "rhode_island":, "south_carolina":, "south_dakota":, "tennessee":, "texas":, "utah":, "vermont":, "virginia":, "washington":, "west_virginia":, "wisconsin":, "wyoming":}
 
 
-small_test_states = ["colorado", "kansas", "oklahoma", "missouri", "arkansas"]
+small_test_states = ["oklahoma", "missouri", "arkansas"]
 
 def requestBuilder():
     for state in small_test_states:
-        #time.sleep(randint(60, 120))
-        req_number = 0
+        req_number = 1
+        if req_number !=1:
+            time.sleep(randint(60, 120))
         while (req_number != ""):
             if (req_number == 25):
                 time.sleep(2)
             base_request = "https://www.trailforks.com/region/#{state}/trails"
-            query_request = "/trails/?page=#{req_number}"
+            query_request = "/?page=#{req_number}"
             query = base_request
-            if (req_number != 0):
+            if (req_number != 1):
                 query = base_request + query_request
 
             trail_list = makeRequest(query, req_number, state)
@@ -56,15 +57,19 @@ def buildTable(trails, state):
             trail_spaces = trail[0].replace('-', ' ')
             length = len(split_area) -1
             # if it has an id, it's in the last spot of the area string
-            areadb = None
+
             area_id = tryConvert(split_area[length])
-            if (area_id == None):
-                areadb= TFStateArea(stateId=dbstate, riding_area=area)
-            else:
-                areadb= TFStateArea(stateId=dbstate, riding_area=area, area_id=area_id )
+
+            areadb= TFStateArea(stateId=dbstate, riding_area=area)
+            areadb.save()
+            #In case we need to do something with area_id, this is basic code, needs to be reqorked.
+            # if (area_id == None):
+            #else:
+            #   areadb= TFStateArea(stateId=dbstate, riding_area=area, area_id=area_id )
 
             trailObj = TFid(areaId= areadb, name=trail_spaces, trail_id=trail[2], url=trail[3])
-            areadb.save()
+
+            #print(areadb.values())
             trailObj.save()
     except Exception as e:
         print(e)
@@ -87,10 +92,9 @@ def makeRequest(request, num, state):
 
     #a bit of randomizing so I don't ddos the site
 
-
-    #delay = randint(10, 45)
-
-    #time.sleep(delay)
+    if num!= 1:
+        delay = randint(10, 45)
+        time.sleep(delay)
 
 
     try:
@@ -103,7 +107,7 @@ def makeRequest(request, num, state):
 
 
 def parseRequest(response, num, state):
-
+    trails = list()
     try:
         html = response.content
         #html = response
@@ -113,14 +117,27 @@ def parseRequest(response, num, state):
             file.write(str(html))
 
         soup = BeautifulSoup(html, 'html.parser')
-        trails = list()
+
         count=0
+        added = True
         for link in soup.find_all('tr'):
+            # The first iteration will always have an empty list
+            # this should catch the ending condtition and allow another
+            # if statment to evaluate whether to send the list back or not
+            if added != True & count > 0:
+                break
             links = link.find_all('a')
+            added = False
             if (links != []):
-                if count ==98:
+                if count == 93:
                     time.sleep(1)
+                # the trail id is always in the html, it doesn't always allow you to search it though
                 ul = link.find("ul", {"id": lambda x: x and x.startswith("trail_")})
+
+                # this should prohibt exceptions from being thrown, and allow method to exit nicely
+                if (ul == None):
+                    break
+
                 trail_tag= ul['id']
                 tag_split = trail_tag.split('_')
                 trail_id = tag_split[1]
@@ -139,13 +156,23 @@ def parseRequest(response, num, state):
                 trails.append((trail_name, region_id, trail_id, trail))
                 count = count+1
 
+                # if it trys to add something that's not a trail, it throws an exception.
+                # it should never get here if no more trails
+                added = True
                 #we know trailforks will never return more than 100 trails at a time
-                if count == 99:
-                    return trails
-        return trails
+
+        if trails != []:
+            return trails
+        else:
+            return None
 
     except Exception as e:
-        print(e)
+
+        # if we do throw exceptions we still want to return what we got.
+        if trails != []:
+            return trails
+        else:
+            return None
 
 
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 
-from .models import SingletracksTrail, MtbProjTrailId
+from .models import SingletracksTrail, TFid, TFStateArea, TFState,  MtbProjTrailId
 from trailHQ.utils.trailForks_helper import requestBuilder
 from django.http import Http404
 from trailHQ.utils.mtbpr_build import requestBuilder
@@ -32,7 +32,8 @@ def all(request):
 
 
     trails =  SingletracksTrail.objects.all()
-    mtbProj = MtbProjTrailId.objects.all()
-
-
+    mtbProj = MtbProjTrailId.objects.all()  # requestBuilder()
+    tfs = TFid.objects.all()
+    print(trails.values())
     return render(request, 'trailHQ/all.html', {'trails': trails})
+
