@@ -48,6 +48,7 @@ def buildTable(trails, state):
         dbstate.save()
         for trail in trails:
             area = trail[1]
+
             #check if last bit is int
                 #if not put back on rest of string
                 #if is put into db as id for trail/area
@@ -56,12 +57,14 @@ def buildTable(trails, state):
             split_area = area.split('-')
             trail_spaces = trail[0].replace('-', ' ')
             length = len(split_area) -1
-            # if it has an id, it's in the last spot of the area string
 
+            # if it has an id, it's in the last spot of the area string
             area_id = tryConvert(split_area[length])
 
             areadb= TFStateArea(stateId=dbstate, riding_area=area)
             areadb.save()
+
+
             #In case we need to do something with area_id, this is basic code, needs to be reqorked.
             # if (area_id == None):
             #else:
@@ -69,7 +72,6 @@ def buildTable(trails, state):
 
             trailObj = TFid(areaId= areadb, name=trail_spaces, trail_id=trail[2], url=trail[3])
 
-            #print(areadb.values())
             trailObj.save()
     except Exception as e:
         print(e)
@@ -106,11 +108,13 @@ def makeRequest(request, num, state):
         print(e)
 
 
+# this method is a bit ugly, but it does the job and no longer throws exceptions
 def parseRequest(response, num, state):
     trails = list()
     try:
         html = response.content
         #html = response
+
         filename = str(num) + state +"tf"
 
         with open("#{filename}.txt", 'w') as file:
@@ -129,12 +133,16 @@ def parseRequest(response, num, state):
             links = link.find_all('a')
             added = False
             if (links != []):
-                if count == 93:
-                    time.sleep(1)
+
+                #debug breakpoint
+                #if count == 93:
+                    #time.sleep(1)
+
                 # the trail id is always in the html, it doesn't always allow you to search it though
                 ul = link.find("ul", {"id": lambda x: x and x.startswith("trail_")})
 
                 # this should prohibt exceptions from being thrown, and allow method to exit nicely
+                # when we cannot find a ul tag that means that we have gone through all the trails on that page
                 if (ul == None):
                     break
 
@@ -144,13 +152,9 @@ def parseRequest(response, num, state):
                 trail = links[0].get('href')
                 region = links[1].get('href')
 
-                print(trail)
-                print(region)
-
                 trail_split = trail.split('/')
                 region_split = region.split('/')
-                print(trail_split)
-                print(region_split)
+
                 trail_name = trail_split[4]
                 region_id = region_split[4]
                 trails.append((trail_name, region_id, trail_id, trail))
@@ -159,7 +163,6 @@ def parseRequest(response, num, state):
                 # if it trys to add something that's not a trail, it throws an exception.
                 # it should never get here if no more trails
                 added = True
-                #we know trailforks will never return more than 100 trails at a time
 
         if trails != []:
             return trails
@@ -173,7 +176,6 @@ def parseRequest(response, num, state):
             return trails
         else:
             return None
-
 
 
 # Function to try converting string to int because not all TF have number id's
