@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import SingletracksTrail
+from .models import SingletracksTrail, TFid, TFStateArea, TFState
 from trailHQ.utils.trailForks_helper import requestBuilder
 from django.http import Http404
 from django.template import RequestContext
@@ -23,7 +23,8 @@ def trail_detail(request, pk):
 
 
 def all(request):
-    requestBuilder()
+    #requestBuilder()
     trails =  SingletracksTrail.objects.all()
+    tfs = TFid.objects.all()
     print(trails.values())
-    return render(request, 'trailHQ/all.html', {'trails': trails})
+    return render(request, 'trailHQ/all.html', {'trails': trails, 'tfs': tfs})
