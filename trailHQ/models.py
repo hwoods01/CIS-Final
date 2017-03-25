@@ -34,13 +34,13 @@ class TFState(models.Model):
 
 class TFStateArea(models.Model):
     id = models.AutoField(primary_key=True)
-    stateId= models.ForeignKey(TFState)
+    stateId= models.ForeignKey('TFState')
     riding_area = models.TextField()
-    area_id = models.IntegerField(default=None)
+    area_id = models.IntegerField(default=None,null=True, blank=True )
 
 class TFid(models.Model):
     id = models.AutoField(primary_key=True)
-    areaId = models.ForeignKey(TFStateArea)
+    areaId = models.ForeignKey('TFStateArea')
     name = models.TextField()
     trail_id = models.IntegerField(default=None)
     url = models.TextField()

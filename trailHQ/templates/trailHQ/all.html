@@ -8,6 +8,11 @@
 
         </div>
     {% endfor %}
+    {% for TFid in tfs %}
+        <div class="tfs">
+            <p>{{TFid.name}}</p>
+        </div>
+    {% endfor %}
 
     {% for MtbProjTrailId in mtbProj %}
         <div class="Mtrail">
