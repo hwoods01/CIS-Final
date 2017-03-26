@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 
 from .models import SingletracksTrail, TFid, TFStateArea, TFState,  MtbProjTrailId
-from trailHQ.utils.trailForks_helper import requestBuilder
+from trailHQ.utils.trailForks_helper import requestBuilder as rebuildTf
 from django.http import Http404
-from trailHQ.utils.mtbpr_build import requestBuilder
+from trailHQ.utils.mtbpr_build import requestBuilder as rebuildmtbp
 from django.template import RequestContext
 # Create your views here.
 
@@ -29,12 +29,14 @@ def all(request):
     ''' Uncommenting this will build more trail objects'''
     #requestBuilder()
 
+    #rebuildmtbp()
+    #rebuildTf()
 
 
 
     trails =  SingletracksTrail.objects.all()
-    mtbProj = MtbProjTrailId.objects.all()  # requestBuilder()
+    mtbProj = MtbProjTrailId.objects.all()
     tfs = TFid.objects.all()
     print(trails.values())
-    return render(request, 'trailHQ/all.html', {'trails': trails})
+    return render(request, 'trailHQ/all.html', {'trails': trails, 'tfs':tfs, 'mtbProj':mtbProj})
 

@@ -15,13 +15,14 @@ import re
 #states_though_W ={"ohio":, :,"oregon":, "pennsylvania":, "rhode_island":, "south_carolina":, "south_dakota":, "tennessee":, "texas":, "utah":, "vermont":, "virginia":, "washington":, "west_virginia":, "wisconsin":, "wyoming":}
 
 
-small_test_states = ["oklahoma", "missouri", "arkansas"]
+small_test_states = ["colorado", "kansas", "oklahoma", "missouri", "arkansas"]
 
 def requestBuilder():
     for state in small_test_states:
         req_number = 1
         if req_number !=1:
-            time.sleep(randint(60, 120))
+            #UNCOMMENT IF YOUR GOING TO MASS GATHER TRAILS
+            '''time.sleep(randint(60, 120))'''
         while (req_number != ""):
             if (req_number == 25):
                 time.sleep(2)
@@ -31,7 +32,7 @@ def requestBuilder():
             if (req_number != 1):
                 query = base_request + query_request
 
-            trail_list = makeRequest(query, req_number, state)
+            trail_list = readFile(query, req_number, state)
 
             # if none then were out of trails for that state, which means we can move on to the next one
             if (trail_list == None):
@@ -77,7 +78,20 @@ def buildTable(trails, state):
         print(e)
 
 
+def readFile(request, num, state):
+    try:
+        import json
+        filename = str(num) + state +"tf"
+        with open ("trailHQ/RawData/#{filename}.txt") as content_file:
+            content = content_file.read()
 
+            return parseRequest(content, num, state)
+
+
+    except Exception as e:
+        print(e)
+        time.sleep(25)
+        return None
 
 
 
@@ -112,14 +126,15 @@ def makeRequest(request, num, state):
 def parseRequest(response, num, state):
     trails = list()
     try:
-        html = response.content
-        #html = response
+        #html = response.content
+        html = response
 
         filename = str(num) + state +"tf"
 
+        '''
         with open("#{filename}.txt", 'w') as file:
             file.write(str(html))
-
+        '''
         soup = BeautifulSoup(html, 'html.parser')
 
         count=0
