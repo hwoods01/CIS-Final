@@ -5,8 +5,8 @@ from bs4 import BeautifulSoup
 from trailHQ.models import TFState, TFStateArea, TFid
 import time
 from random import randint
-import re
-
+import random
+from trailHQ.models import TFState, TFStateArea, TFid
 
 '''these objects will help loop get the specific trail numbers of all the trails'''
 #states_though_f = {"alabama": , "alaska": , "arizona":, :, "california":, :, "connecticut":, "delaware":, }
@@ -62,8 +62,17 @@ def buildTable(trails, state):
             # if it has an id, it's in the last spot of the area string
             area_id = tryConvert(split_area[length])
 
-            areadb= TFStateArea(stateId=dbstate, riding_area=area)
-            areadb.save()
+            area = TFStateArea.objects.get(riding_area =area)
+            #we can do this here because it doesn't actually get evaluated.
+
+            if not (area.exists()):
+                area = TFStateArea(stateId=dbstate, riding_area=area)
+                area.save()
+
+
+
+
+
 
 
             #In case we need to do something with area_id, this is basic code, needs to be reqorked.
@@ -71,7 +80,7 @@ def buildTable(trails, state):
             #else:
             #   areadb= TFStateArea(stateId=dbstate, riding_area=area, area_id=area_id )
 
-            trailObj = TFid(areaId= areadb, name=trail_spaces, trail_id=trail[2], url=trail[3])
+            trailObj = TFid(areaId= area, name=trail_spaces, trail_id=trail[2], url=trail[3])
 
             trailObj.save()
     except Exception as e:
