@@ -1,9 +1,22 @@
+# coding: interpy
+
+
 from trailHQ.models import MtbProjStateId, MtbProjTrailId
 from trailHQ.models import SingletracksTrail
 from trailHQ.models import TFState, TFStateArea, TFid
 from collections import Counter
 
-omit_list=  [ 'the', 'in', 'trail', 'and', 'for' ]
+omit_list=  [ 'the', 'in', 'trail', 'and', 'for', 'tr' ]
+word =""
+state = ""
+
+
+
+querylist = {
+    'area': "select * from trailHQ_tfstatearea  tfa join trailHQ_tfstate  tfs on tfa.stateId_id = tfs._id where tfa.riding_area LIKE '%{}%' AND tfs.state_name = '{}'",
+    'trail':  "select * from trailHQ_tfid tf join trailHQ_tfstatearea tfa on tf.areaId_id = tfa.id join trailHQ_tfstate tfs on tfa.stateId_id = tfs._id where tf.name LIKE '%{}%' and tfs.state_name = '{}'",
+}
+
 
 # ALGORITHIM
     #first we'll try querying data based on the area to see if we can get a solid list of trails
@@ -28,7 +41,7 @@ def matchController(areaName, state):
     matches = dict()
 
     searchTrails = buildMatchStrings(trails)
-    matches = matchTF(searchTrails, matches,state)
+    matches = matchForks(searchTrails, matches, state.lower())
 
     for m in matches:
         print(m)
@@ -50,13 +63,21 @@ def getMatches(trails):
      print("do work")
      #TODO write table for storing matches
 
+
+
+
+
+
+
+
+
 # builds the search lists, going to use them for both comparisons so might as well separate it out.
 def buildMatchStrings(trails):
     searchNames = []
     partsToSearch = []
     for tr in trails:
 
-        trName = tr.name
+        trName = tr.name.lower()
 
 
         # split the name up if it's multiple words
@@ -70,7 +91,7 @@ def buildMatchStrings(trails):
                     break
 
             if(add):
-               partsToSearch.append(part.lower())
+               partsToSearch.append(part)
         # appending the id to the last item of the list, to ensure all matches are found and we can keep track of the order
         partsToSearch.append(tr.key)
 
@@ -78,6 +99,123 @@ def buildMatchStrings(trails):
         partsToSearch = []
 
     return searchNames
+
+
+# Method:
+#   check trail,
+#   check no s
+#       check area
+#       check no area s
+
+
+
+
+def matchForks(searchNames, foundMatches, state):
+
+
+
+    for trail in searchNames:
+
+        found = []
+        # getting the id of the singletracks trail for matching.
+        elems = len(trail)
+        trailId = trail[elems - 1]
+
+        # the trail has multiple dominant strings
+        if elems > 1:
+            found = tfQueryMultiple('trail', trail, state)
+
+            if found == []:
+                found = tfQueryMultiple('area', trail, state)
+
+        # there is just one dominant string which requires being handled a bit different
+        else:
+            found = tfQuerySingle('trail', trail, state)
+            if found == None:
+                found = tfQuerySingle('area', trail, state)
+
+
+        # this will give us the duplicate values in the list which hopefully there are some. :/
+        dups = [k for k, v in Counter(found).items() if v > 1]
+
+        if len(dups) >1:
+            # cry and insert flag to tell us later that this one didn't want to be matched.
+            dups.insert(0, "flag")
+
+        # put the all the duplicate matches (hopefully one) to be with singletracks id
+        foundMatches[trailId] = dups
+    return foundMatches
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def tfQueryMultiple(type, trail, state):
+
+    # list to store results in
+    found = []
+
+
+    # every word in trail except the last one because it is the id for singletracks
+    for word in trail[:-1]:
+        query = querylist[type]
+        query = query.format(word,state)
+        results = TFid.objects.raw(query)
+        if results == None:
+
+            # if we didn't get any hits were going to try removing an 's' if it's the last character and trying again.
+            if word[len(word) - 1] == 's':
+                word = word[:-1]
+                query = querylist[type]
+                query = query.format(word, state)
+                results = TFStateArea.objects.raw(query)
+
+        # can only enter if we have results
+        if results != None:
+            # add all the results to the list.
+            for r in results:
+                found.append(r.id)
+
+    return found
+
+
+# could probably combine the two functions but its not worth the effort currently
+def tfQuerySingle(type, trail, state):
+
+    found = []
+
+    # add spaces to try and match on whole word
+    word = ' ' + trail[0] + ' '
+    query = querylist[trail]
+    query= query.format(word,state)
+    results = exec(query)
+    if results == None:
+
+        # if we didn't get any hits were going to try removing an 's' if it's the last character and trying again.
+        if trail[0][len(trail[0]) - 1] == 's':
+            word = ' ' + trail[0][:-1] + ' '
+
+            query = querylist[type]
+            query = query.format(word, state)
+            results = exec(querylist[type])
+            # add all the results to the list.
+            for r in results:
+                found.append(r.id)
+
+        return found
+
+
+
+'''
 
 # this will preform the match for trailforks
 def matchTF(searchNames, foundMatches, state):
@@ -100,38 +238,48 @@ def matchTF(searchNames, foundMatches, state):
 
         # if there are more than 2 search terms then we can search on more than one word
         if (elems > 1):
-            # going to do searches at most to start out
-            results1 = TFid.objects.filter(name__icontains = trail[0], areaId__stateId__state_name__iexact=state)
+            foundIds = []
 
-            results2 = TFid.objects.filter(name__icontains= trail[1], areaId__stateId__state_name__iexact=state)
+            # try to match on every word.
+            for word in trail[:-1]:
+                # going to do searches at most to start out
+                results =
+
+                for r in results:
+                    foundIds.append(r.id)
+
 
             # if either is empty, it could be the there was punctuation or it could be
             # that the area is the name of the trail
             if len(results1)==0 or len(results2)==0:
 
                 # a good number of trails will have the area as the name of the trail singletracks will return.
-                checkAreaForTrails(trail, state)
+                matches= checkAreaForTrails(trail, state)
+
+                if (matches):
+
 
             # TODO need to define what happens here
             # TODO maybe look into set operators to do this.
-            for r1 in results1:
-                for r2 in results2:
+            else:
+                for r1 in results1:
+                    for r2 in results2:
 
-                    # Search by matches, and if one is found add that id later to build the
-                    # match table
-                    if (r1.id == r2.id):
-                        if(matchCount > 1 and foundMultiple):
-                            foundMatches[trailId].insert(0, "flag")
-                            foundMatches[trailId].append(r1.id)
-                            matchCount += 1
-                        else:
-                            # going to store matches as a dictionary with trailid for
-                            # singletracks being the key and a list of the other 2 as value
-                            foundMatches[trailId].append(r1.id)
-                            matchCount+=1
+                        # Search by matches, and if one is found add that id later to build the
+                        # match table
+                        if (r1.id == r2.id):
+                            if(matchCount > 1 and foundMultiple):
+                                foundMatches[trailId].insert(0, "flag")
+                                foundMatches[trailId].append(r1.id)
+                                matchCount += 1
+                            else:
+                                # going to store matches as a dictionary with trailid for
+                                # singletracks being the key and a list of the other 2 as value
+                                foundMatches[trailId].append(r1.id)
+                                matchCount+=1
 
-                            # we set this to true because we should only have one match
-                            foundMultiple=True
+                                # we set this to true because we should only have one match
+                                foundMultiple=True
 
         # if there are less than 3 then we only want to search on the first term because the second term is the
         # id of the trail from SingleTracks Table.
@@ -165,7 +313,7 @@ def checkAreaForTrails(trail, state):
     for word in trail[:-1]:
 
         word = word
-        results = TFStateArea.objects.filter(riding_area__icontains=word, stateId__state_name__iexact=state)
+        results =
 
         for r in results:
             foundIds.append(r.id)
@@ -177,8 +325,7 @@ def checkAreaForTrails(trail, state):
 
             # if this doesn't evaluate to true we're screwed
             # taking the s off the string if it's the last character
-            if word[len(word)- 1] == 's':
-                word = word[:-1]
+
                 results = TFStateArea.objects.filter(riding_area__icontains=word, stateId__state_name=state.lower())
                 for r in results:
                     foundIds.append(r.id)
@@ -189,7 +336,4 @@ def checkAreaForTrails(trail, state):
     # found this here http://stackoverflow.com/questions/11236006/identify-duplicate-values-in-a-list-in-python
     dups = [k for k,v in Counter(foundIds).items() if v> 1]
 
-    if len(dups) >1:
-        # cry
-        return None
-    return dups
+'''

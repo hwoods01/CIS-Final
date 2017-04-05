@@ -37,7 +37,7 @@ def all(request):
     area = "Wichita"
     state = "Kansas"
 
-    makeRequest(area, state)
+#    makeRequest(area, state)
     matchController(area, state)
 
 
