@@ -8,6 +8,10 @@ from random import randint
 import random
 from trailHQ.models import TFState, TFStateArea, TFid
 
+import string
+import re
+
+
 '''these objects will help loop get the specific trail numbers of all the trails'''
 #states_though_f = {"alabama": , "alaska": , "arizona":, :, "california":, :, "connecticut":, "delaware":, }
 #states_through_L={"florida":, "georgia":, "hawaii":, "idaho":, "illnois":,"indiana":, "iowa":, :, "kentucky": , "louisiana":, }
@@ -33,6 +37,8 @@ def requestBuilder():
                 query = base_request + query_request
 
             trail_list = readFile(query, req_number, state)
+            # trail_list = makeRequest(query, req_number, state)
+
 
             # if none then were out of trails for that state, which means we can move on to the next one
             if (trail_list == None):
@@ -45,8 +51,7 @@ def requestBuilder():
 
 def buildTable(trails, state):
     try:
-        dbstate = TFState(state_name= state)
-        dbstate.save()
+        dbstate = TFState.objects.get_or_create(state_name= state)
         for trail in trails:
             area = trail[1]
 
@@ -55,19 +60,14 @@ def buildTable(trails, state):
                 #if is put into db as id for trail/area
             #need to grab everything but the last off the split for this to work.
             #put the
-            split_area = area.split('-')
-            trail_spaces = trail[0].replace('-', ' ')
+            split_area = area.split(' ')
+
             length = len(split_area) -1
 
             # if it has an id, it's in the last spot of the area string
             area_id = tryConvert(split_area[length])
-
-            area = TFStateArea.objects.get(riding_area =area)
-            #we can do this here because it doesn't actually get evaluated.
-
-            if not (area.exists()):
-                area = TFStateArea(stateId=dbstate, riding_area=area)
-                area.save()
+            id = dbstate[0]._id
+            area = TFStateArea.objects.get_or_create(riding_area =area, stateId=dbstate[0])
 
 
 
@@ -80,9 +80,8 @@ def buildTable(trails, state):
             #else:
             #   areadb= TFStateArea(stateId=dbstate, riding_area=area, area_id=area_id )
 
-            trailObj = TFid(areaId= area, name=trail_spaces, trail_id=trail[2], url=trail[3])
+            TFid.objects.update_or_create(areaId= area[0], name=trail[0], trail_id=trail[2], url=trail[3])
 
-            trailObj.save()
     except Exception as e:
         print(e)
 
@@ -134,6 +133,7 @@ def makeRequest(request, num, state):
 # this method is a bit ugly, but it does the job and no longer throws exceptions
 def parseRequest(response, num, state):
     trails = list()
+    count = 0
     try:
         #html = response.content
         html = response
@@ -146,7 +146,7 @@ def parseRequest(response, num, state):
         '''
         soup = BeautifulSoup(html, 'html.parser')
 
-        count=0
+
         added = True
         for link in soup.find_all('tr'):
             # The first iteration will always have an empty list
@@ -179,9 +179,23 @@ def parseRequest(response, num, state):
                 trail_split = trail.split('/')
                 region_split = region.split('/')
 
-                trail_name = trail_split[4]
-                region_id = region_split[4]
-                trails.append((trail_name, region_id, trail_id, trail))
+
+                # grab the string, lowercase it, and replace dashes with spaces
+                trail_name = trail_split[4].lower().replace('-', ' ')
+                region_id = region_split[4].lower().replace('-',' ')
+
+
+                #Clean both the trail name of punctuation and then add to list.
+                #sanatized_trail = " ".join([e for e in trail_name if e in string.ascii_letters or e in string.whitespace or e in string.digits])
+                #sanatized_region = " ".join([e for e in region_id if e in string.ascii_letters or e in string.whitespace or e in string.digits])
+
+
+
+                sanatized_trail = re.sub(r'([^\s\w]|_)+', '', trail_name)
+
+                sanatized_region = re.sub(r'([^\s\w]|_)+', '', region_id)
+
+                trails.append((sanatized_trail, sanatized_region, trail_id, trail))
                 count = count+1
 
                 # if it trys to add something that's not a trail, it throws an exception.

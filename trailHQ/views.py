@@ -5,6 +5,8 @@ from trailHQ.utils.trailForks_helper import requestBuilder as rebuildTf
 from django.http import Http404
 from trailHQ.utils.mtbpr_build import requestBuilder as rebuildmtbp
 from django.template import RequestContext
+from trailHQ.utils.ST_Helper import makeRequest
+from trailHQ.utils.matcher import matchController
 # Create your views here.
 
 def trail_detail(request, pk):
@@ -32,6 +34,11 @@ def all(request):
     #rebuildmtbp()
     #rebuildTf()
 
+    area = "Wichita"
+    state = "Kansas"
+
+    makeRequest(area, state)
+    matchController(area, state)
 
 
     trails =  SingletracksTrail.objects.all()

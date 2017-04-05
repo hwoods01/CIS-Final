@@ -66,8 +66,8 @@ def parseRequest(response):
                 if(difficulty == None):
                     difficulty = "Unknown"
 
-                trail = SingletracksTrail(city=i['city'], state=i['state'], name=j['name'], longitude=i['lon'],latitude=i['lat'], description=j['description'],url=j['url'],length=j['length'], rating=j['rating'], difficulty= difficulty)
-                trail.save()
+                SingletracksTrail.objects.update_or_create(city=i['city'], state=i['state'], name=j['name'], longitude=i['lon'],latitude=i['lat'], description=j['description'],url=j['url'],length=j['length'], rating=j['rating'], difficulty= difficulty)
+
 
     except Exception as e:
 

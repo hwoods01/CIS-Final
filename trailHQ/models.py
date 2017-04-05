@@ -47,4 +47,3 @@ class TFid(models.Model):
     name = models.TextField()
     trail_id = models.IntegerField(default=None)
     url = models.TextField()
-
