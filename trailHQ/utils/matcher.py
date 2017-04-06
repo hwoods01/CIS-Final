@@ -211,6 +211,14 @@ def dictfetchall(cursor):
         for row in cursor.fetchall()
     ]
 
+# IDEA
+# Do a normal like query
+#   see if the resulting trail name would only have one dominant string
+
+
+#
+
+
 
 # could probably combine the two functions but its not worth the effort currently
 def tfQuerySingle(type, trail, state):
