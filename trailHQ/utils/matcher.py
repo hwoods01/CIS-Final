@@ -127,25 +127,21 @@ def matchForks(searchNames, foundMatches, state):
         # the trail has multiple dominant strings
         if elems > 1:
             found = tfQueryMultiple('trail', trail, state)
-
             dups = checkDups(found)
 
             if len(dups) < 1:
                 found = tfQueryMultiple('area', trail, state)
-
                 dups = checkDups(found)
+
         # there is just one dominant string which requires being handled a bit different
+        # TODO tweak to allow one dominant string matches
         else:
             found = tfQuerySingle('trail', trail, state)
-
             dups = checkDups(found)
 
             if len(dups) < 1:
                 found = tfQuerySingle('area', trail, state)
-
                 dups = checkDups(found)
-
-        # this will give us the duplicate values in the list which hopefully there are some. :/
 
 
         if len(dups) >1:
@@ -164,43 +160,49 @@ def checkDups(found):
 
 def tfQueryMultiple(type, trail, state):
 
-    id = ""
-    if type == 'trail':
-        id = 'Tid'
-    else:
-        id = 'Aid'
+    try:
+        id = ""
+        if type == 'trail':
+            id = 'Tid'
+        else:
+            id = 'Aid'
+        # list to store results in
+        found = []
+
+        # every word in trail except the last one because it is the id for singletracks
+        with connection.cursor() as cursor:
+            for word in trail[:-1]:
+                query = querylist[type]
+                params = ['%'+word+'%',state]
+                cursor.execute(query,params)
+                results = dictfetchall(cursor)
+                if results == []:
+
+                    # if we didn't get any hits were going to try removing an 's' if it's the last character and trying again.
+                    if word[len(word) - 1] == 's':
+                        word = word[:-1]
+                        query = querylist[type]
+                        params = ['%'+word+'%', state]
+                        cursor.execute(query, params)
+                        results = dictfetchall(cursor)
+
+                # can only enter if we have results
+                if results != []:
+                    # add all the results to the list.
+                    for r in results:
+                        found.append(id[0]+str(r[id]))
+
+            if len(found) < 2: return []
+
+            else : return found
 
 
+    except Exception as e:
+        print("Failed matching\n")
+        print("Exception: ")
+        print(e)
+        print("\nTrail that it failed on: "+ trail + ' ' + state + '\n')
 
-    # list to store results in
-    found = []
-
-
-    # every word in trail except the last one because it is the id for singletracks
-    with connection.cursor() as cursor:
-        for word in trail[:-1]:
-            query = querylist[type]
-            params = ['%'+word+'%',state]
-            cursor.execute(query,params)
-            results = dictfetchall(cursor)
-            if results == []:
-
-                # if we didn't get any hits were going to try removing an 's' if it's the last character and trying again.
-                if word[len(word) - 1] == 's':
-                    word = word[:-1]
-                    query = querylist[type]
-                    params = ['%'+word+'%', state]
-                    cursor.execute(query, params)
-                    results = dictfetchall(cursor)
-
-            # can only enter if we have results
-            if results != []:
-                # add all the results to the list.
-                for r in results:
-                    found.append(id[0]+str(r[id]))
-        if len(found) < 2: return []
-
-        else : return found
 
 def dictfetchall(cursor):
     columns = [col[0] for col in cursor.description]
