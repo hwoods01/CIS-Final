@@ -6,15 +6,18 @@ from trailHQ.models import SingletracksTrail
 from trailHQ.models import TFState, TFStateArea, TFid
 from collections import Counter
 
-omit_list=  [ 'the', 'in', 'trail', 'and', 'for', 'tr' ]
+from django.db import connection
+from collections import namedtuple
+
+omit_list=  [ 'the', 'in', 'trail', 'and', 'for', 'tr', 'park' ]
 word =""
 state = ""
 
 
 
 querylist = {
-    'area': "select * from trailHQ_tfstatearea  tfa join trailHQ_tfstate  tfs on tfa.stateId_id = tfs._id where tfa.riding_area LIKE '%{}%' AND tfs.state_name = '{}'",
-    'trail':  "select * from trailHQ_tfid tf join trailHQ_tfstatearea tfa on tf.areaId_id = tfa.id join trailHQ_tfstate tfs on tfa.stateId_id = tfs._id where tf.name LIKE '%{}%' and tfs.state_name = '{}'",
+    'area': "select * from trailHQ_tfstatearea  tfa join trailHQ_tfstate  tfs on tfa.stateId_id = tfs.Sid where tfa.riding_area LIKE %s AND tfs.state_name = %s",
+    'trail':  "select * from trailHQ_tfid tf join trailHQ_tfstatearea tfa on tf.areaId_id = tfa.Aid join trailHQ_tfstate tfs on tfa.stateId_id = tfs.Sid where tf.name LIKE %s and tfs.state_name = %s",
 }
 
 
@@ -125,18 +128,25 @@ def matchForks(searchNames, foundMatches, state):
         if elems > 1:
             found = tfQueryMultiple('trail', trail, state)
 
-            if found == []:
+            dups = checkDups(found)
+
+            if len(dups) < 1:
                 found = tfQueryMultiple('area', trail, state)
 
+                dups = checkDups(found)
         # there is just one dominant string which requires being handled a bit different
         else:
             found = tfQuerySingle('trail', trail, state)
-            if found == None:
+
+            dups = checkDups(found)
+
+            if len(dups) < 1:
                 found = tfQuerySingle('area', trail, state)
 
+                dups = checkDups(found)
 
         # this will give us the duplicate values in the list which hopefully there are some. :/
-        dups = [k for k, v in Counter(found).items() if v > 1]
+
 
         if len(dups) >1:
             # cry and insert flag to tell us later that this one didn't want to be matched.
@@ -147,45 +157,57 @@ def matchForks(searchNames, foundMatches, state):
     return foundMatches
 
 
-
-
-
-
-
-
-
-
-
-
+def checkDups(found):
+    dups = [k for k, v in Counter(found).items() if v > 1]
+    return dups
 
 
 def tfQueryMultiple(type, trail, state):
+
+    id = ""
+    if type == 'trail':
+        id = 'Tid'
+    else:
+        id = 'Aid'
+
+
 
     # list to store results in
     found = []
 
 
     # every word in trail except the last one because it is the id for singletracks
-    for word in trail[:-1]:
-        query = querylist[type]
-        query = query.format(word,state)
-        results = TFid.objects.raw(query)
-        if results == None:
+    with connection.cursor() as cursor:
+        for word in trail[:-1]:
+            query = querylist[type]
+            params = ['%'+word+'%',state]
+            cursor.execute(query,params)
+            results = dictfetchall(cursor)
+            if results == []:
 
-            # if we didn't get any hits were going to try removing an 's' if it's the last character and trying again.
-            if word[len(word) - 1] == 's':
-                word = word[:-1]
-                query = querylist[type]
-                query = query.format(word, state)
-                results = TFStateArea.objects.raw(query)
+                # if we didn't get any hits were going to try removing an 's' if it's the last character and trying again.
+                if word[len(word) - 1] == 's':
+                    word = word[:-1]
+                    query = querylist[type]
+                    params = ['%'+word+'%', state]
+                    cursor.execute(query, params)
+                    results = dictfetchall(cursor)
 
-        # can only enter if we have results
-        if results != None:
-            # add all the results to the list.
-            for r in results:
-                found.append(r.id)
+            # can only enter if we have results
+            if results != []:
+                # add all the results to the list.
+                for r in results:
+                    found.append(id[0]+str(r[id]))
+        if len(found) < 2: return []
 
-    return found
+        else : return found
+
+def dictfetchall(cursor):
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns,row))
+        for row in cursor.fetchall()
+    ]
 
 
 # could probably combine the two functions but its not worth the effort currently
@@ -209,131 +231,18 @@ def tfQuerySingle(type, trail, state):
             results = exec(querylist[type])
             # add all the results to the list.
             for r in results:
-                found.append(r.id)
+                found.append({id[0]:r.id})
 
         return found
 
 
 
 '''
-
-# this will preform the match for trailforks
-def matchTF(searchNames, foundMatches, state):
-
-    # search with each part of the search string of each trail
-    # not the most efficient but that way i don't have to get fancy with django
-    # compare based on id if they are a match or not.
-
-
-
-
-    for trail in searchNames:
-        elems = len(trail)
-
-        # this is the id of the trail from singletracks
-        trailId = trail[elems-1]
-
-        matchCount = 0
-        foundMultiple = False
-
-        # if there are more than 2 search terms then we can search on more than one word
-        if (elems > 1):
-            foundIds = []
-
-            # try to match on every word.
-            for word in trail[:-1]:
-                # going to do searches at most to start out
-                results =
-
-                for r in results:
-                    foundIds.append(r.id)
-
-
-            # if either is empty, it could be the there was punctuation or it could be
-            # that the area is the name of the trail
-            if len(results1)==0 or len(results2)==0:
-
-                # a good number of trails will have the area as the name of the trail singletracks will return.
-                matches= checkAreaForTrails(trail, state)
-
-                if (matches):
-
-
-            # TODO need to define what happens here
-            # TODO maybe look into set operators to do this.
-            else:
-                for r1 in results1:
-                    for r2 in results2:
-
-                        # Search by matches, and if one is found add that id later to build the
-                        # match table
-                        if (r1.id == r2.id):
-                            if(matchCount > 1 and foundMultiple):
-                                foundMatches[trailId].insert(0, "flag")
-                                foundMatches[trailId].append(r1.id)
-                                matchCount += 1
-                            else:
-                                # going to store matches as a dictionary with trailid for
-                                # singletracks being the key and a list of the other 2 as value
-                                foundMatches[trailId].append(r1.id)
-                                matchCount+=1
-
-                                # we set this to true because we should only have one match
-                                foundMultiple=True
-
-        # if there are less than 3 then we only want to search on the first term because the second term is the
-        # id of the trail from SingleTracks Table.
-        # we also want to make sure we search by the whole word
-        else:
-            results = TFid.objects.filter(name__contains = ' '+trail[0] + ' ')
-
-            if (not results == [] ):
-
-                if (len(results) > 1):
-                    # going to literally attach flag to show that the we had more than one result
-                    foundMatches[trailId].append("flag")
-                for r in results:
-                    # for now we're going to store all trails that claim to match
-                    foundMatches[trailId].append(r)
-
-    return foundMatches
-
 # this will preform the match for mtbProj
 #def matchMTBP():
 
 # this will create the relational match for that table
 #def createMatch():
 
-
-
-# this method will check to see if the trail name is actually the area name for trailforks
-def checkAreaForTrails(trail, state):
-
-    foundIds = []
-    for word in trail[:-1]:
-
-        word = word
-        results =
-
-        for r in results:
-            foundIds.append(r.id)
-
-    # don't care that this duplicates
-    # grasping at straws
-    if foundIds == []:
-        for word in trail[:-1]:
-
-            # if this doesn't evaluate to true we're screwed
-            # taking the s off the string if it's the last character
-
-                results = TFStateArea.objects.filter(riding_area__icontains=word, stateId__state_name=state.lower())
-                for r in results:
-                    foundIds.append(r.id)
-            else :
-                print('A trail by this name could not be found: ' + word)
-
-
-    # found this here http://stackoverflow.com/questions/11236006/identify-duplicate-values-in-a-list-in-python
-    dups = [k for k,v in Counter(foundIds).items() if v> 1]
 
 '''

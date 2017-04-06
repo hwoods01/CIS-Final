@@ -32,17 +32,17 @@ class MtbProjTrailId(models.Model):
     stateId=models.ForeignKey('MtbProjStateId')
 
 class TFState(models.Model):
-    _id = models.AutoField(primary_key=True)
+    Sid = models.AutoField(primary_key=True)
     state_name = models.CharField(max_length=20)
 
 class TFStateArea(models.Model):
-    id = models.AutoField(primary_key=True)
+    Aid = models.AutoField(primary_key=True)
     stateId= models.ForeignKey('TFState')
     riding_area = models.TextField()
     area_id = models.IntegerField(default=None,null=True, blank=True )
 
 class TFid(models.Model):
-    id = models.AutoField(primary_key=True)
+    Tid = models.AutoField(primary_key=True)
     areaId = models.ForeignKey('TFStateArea')
     name = models.TextField()
     trail_id = models.IntegerField(default=None)
