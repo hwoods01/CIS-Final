@@ -85,23 +85,18 @@ def buildMatchStrings(trails):
 
         # split the name up if it's multiple words
         for part in trName.split(' '):
-            add = True
-            #if it's in the omit list were not going to add it to the searching part
-            for o in omit_list:
-                if(part == o or len(part) < 3):
 
-                    add = False
-                    break
+            add = checkDominant(part)
 
             if(add):
-               partsToSearch.append(part)
-        # appending the id to the last item of the list, to ensure all matches are found and we can keep track of the order
-        partsToSearch.append(tr.key)
+                partsToSearch.append(part)
+                # appending the id to the last item of the list, to ensure all matches are found and we can keep track of the order
+                partsToSearch.append(tr.key)
 
-        searchNames.append(partsToSearch)
-        partsToSearch = []
+                searchNames.append(partsToSearch)
+            partsToSearch = []
 
-    return searchNames
+        return searchNames
 
 
 # Method:
@@ -126,30 +121,25 @@ def matchForks(searchNames, foundMatches, state):
 
         # the trail has multiple dominant strings
         if elems > 1:
-            found = tfQueryMultiple('trail', trail, state)
-            dups = checkDups(found)
+            found = tfQuery('trail', trail, state, 'multiple')
 
-            if len(dups) < 1:
-                found = tfQueryMultiple('area', trail, state)
-                dups = checkDups(found)
+
+            if len(found) < 1:
+                found = tfQuery('area', trail, state, 'multiple')
+
 
         # there is just one dominant string which requires being handled a bit different
-        # TODO tweak to allow one dominant string matches
         else:
-            found = tfQuerySingle('trail', trail, state)
-            dups = checkDups(found)
-
-            if len(dups) < 1:
-                found = tfQuerySingle('area', trail, state)
-                dups = checkDups(found)
+            found = tfQuery('trail', trail, state, 'single')
 
 
-        if len(dups) >1:
-            # cry and insert flag to tell us later that this one didn't want to be matched.
-            dups.insert(0, "flag")
+            if len(found) < 1:
+                found = tfQuery('area', trail, state, 'single')
+
+
 
         # put the all the duplicate matches (hopefully one) to be with singletracks id
-        foundMatches[trailId] = dups
+        foundMatches[trailId] = found
     return foundMatches
 
 
@@ -158,7 +148,7 @@ def checkDups(found):
     return dups
 
 
-def tfQueryMultiple(type, trail, state):
+def tfQuery(type, trail, state, domWords):
 
     try:
         id = ""
@@ -188,14 +178,11 @@ def tfQueryMultiple(type, trail, state):
 
                 # can only enter if we have results
                 if results != []:
-                    # add all the results to the list.
-                    for r in results:
-                        found.append(id[0]+str(r[id]))
+                    found = handleResults(results, domWords, type)
+                else:
+                    return []
 
-            if len(found) < 2: return []
-
-            else : return found
-
+                return found
 
     except Exception as e:
         print("Failed matching\n")
@@ -203,6 +190,32 @@ def tfQueryMultiple(type, trail, state):
         print(e)
         print("\nTrail that it failed on: "+ trail + ' ' + state + '\n')
 
+
+def handleResults(results, domWords, type):
+
+    id = ""
+    if type == 'trail':
+        id = 'Tid'
+    else:
+        id = 'Aid'
+
+    found = []
+    # add all the results to the list.
+    for r in results:
+        if domWords == 'single':
+            add = checkSingle(r)
+            if not add:
+                break
+        found.append(id[0] + str(r[id]))
+
+    # if there is only one result then checkDups returns an empty list
+    if domWords != 'single':
+        dups = checkDups(found)
+        if dups > 1:
+            dups.insert(0, "flag")
+    else:
+        dups = found
+    return dups
 
 def dictfetchall(cursor):
     columns = [col[0] for col in cursor.description]
@@ -219,32 +232,25 @@ def dictfetchall(cursor):
 #
 
 
+def checkSingle(r):
+    # first check to see if there is only one dominant word in the resulting string
+    name = r['name']
+    count = 0
+    for n in name.split(' '):
+        if (checkDominant(n)):
+            count += 1
 
-# could probably combine the two functions but its not worth the effort currently
-def tfQuerySingle(type, trail, state):
+    if (count == 1):
+        return True
+    else: return False
 
-    found = []
-
-    # add spaces to try and match on whole word
-    word = ' ' + trail[0] + ' '
-    query = querylist[trail]
-    query= query.format(word,state)
-    results = exec(query)
-    if results == None:
-
-        # if we didn't get any hits were going to try removing an 's' if it's the last character and trying again.
-        if trail[0][len(trail[0]) - 1] == 's':
-            word = ' ' + trail[0][:-1] + ' '
-
-            query = querylist[type]
-            query = query.format(word, state)
-            results = exec(querylist[type])
-            # add all the results to the list.
-            for r in results:
-                found.append({id[0]:r.id})
-
-        return found
-
+# The compares the passed in word to the list to omit against and
+# returns true if the word is dominant and false if it isnt
+def checkDominant(part):
+    for o in omit_list:
+        if (part == o or len(part) < 3):
+            return False
+    return True
 
 
 '''
@@ -254,5 +260,43 @@ def tfQuerySingle(type, trail, state):
 # this will create the relational match for that table
 #def createMatch():
 
+spacex/
 
+
+# could probably combine the two functions but its not worth the effort currently
+def tfQuerySingle(type, trail, state):
+
+    id = ""
+    if type == 'trail':
+        id = 'Tid'
+    else:
+        id = 'Aid'
+    # list to store results in
+    found = []
+
+    # every word in trail except the last one because it is the id for singletracks
+    with connection.cursor() as cursor:
+        for word in trail[:-1]:
+            query = querylist[type]
+            params = ['%' + word + '%', state]
+            cursor.execute(query, params)
+            results = dictfetchall(cursor)
+            if results == []:
+
+                # if we didn't get any hits were going to try removing an 's' if it's the last character and trying again.
+                if word[len(word) - 1] == 's':
+                    word = word[:-1]
+                    query = querylist[type]
+                    params = ['%' + word + '%', state]
+                    cursor.execute(query, params)
+                    results = dictfetchall(cursor)
+
+            # can only enter if we have results
+            if results != []:
+
+                # add all the results to the list.
+                for r in results:
+
+                    if ()
+                    found.append(id[0] + str(r[id]))
 '''
