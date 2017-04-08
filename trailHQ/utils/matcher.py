@@ -9,7 +9,7 @@ from collections import Counter
 from django.db import connection
 from collections import namedtuple
 
-omit_list=  [ 'the', 'in', 'trail', 'and', 'for', 'tr', 'park' ]
+omit_list=  [ 'the', 'in', 'trail', 'and', 'for', 'tr', 'park' , 'creek', 'loop']
 word =""
 state = ""
 
@@ -82,21 +82,24 @@ def buildMatchStrings(trails):
 
         trName = tr.name.lower()
 
-
+        #if trName == 'reno / flag / bear / deadman loop':
+            #print('break')
         # split the name up if it's multiple words
         for part in trName.split(' '):
+
 
             add = checkDominant(part)
 
             if(add):
                 partsToSearch.append(part)
-                # appending the id to the last item of the list, to ensure all matches are found and we can keep track of the order
-                partsToSearch.append(tr.key)
+        if (partsToSearch != []):
+            # appending the id to the last item of the list, to ensure all matches are found and we can keep track of the order
+            partsToSearch.append(tr.key)
 
-                searchNames.append(partsToSearch)
-            partsToSearch = []
+            searchNames.append(partsToSearch)
+        partsToSearch = []
 
-        return searchNames
+    return searchNames
 
 
 # Method:
@@ -120,7 +123,7 @@ def matchForks(searchNames, foundMatches, state):
         trailId = trail[elems - 1]
 
         # the trail has multiple dominant strings
-        if elems > 1:
+        if elems > 2:
             found = tfQuery('trail', trail, state, 'multiple')
 
 
@@ -151,17 +154,14 @@ def checkDups(found):
 def tfQuery(type, trail, state, domWords):
 
     try:
-        id = ""
-        if type == 'trail':
-            id = 'Tid'
-        else:
-            id = 'Aid'
         # list to store results in
         found = []
 
         # every word in trail except the last one because it is the id for singletracks
         with connection.cursor() as cursor:
             for word in trail[:-1]:
+                if word == 'strand':
+                    print("break")
                 query = querylist[type]
                 params = ['%'+word+'%',state]
                 cursor.execute(query,params)
@@ -178,17 +178,30 @@ def tfQuery(type, trail, state, domWords):
 
                 # can only enter if we have results
                 if results != []:
-                    found = handleResults(results, domWords, type)
-                else:
-                    return []
+                    found += handleResults(results, domWords, type)
 
-                return found
+            if domWords != 'single':
+                dups = checkDups(found)
+                if len(dups) > 1:
+                    dups.insert(0, "flag")
+                    print("flag")
+            else:
+                dups = found
+
+            if dups == []:
+                print("Couldn't match: " )
+                for p in trail: print(p)
+                return []
+
+
+            return dups
 
     except Exception as e:
         print("Failed matching\n")
         print("Exception: ")
         print(e)
-        print("\nTrail that it failed on: "+ trail + ' ' + state + '\n')
+        print("\nTrail that it failed on: "'\n')
+        for p in trail: print(p)
 
 
 def handleResults(results, domWords, type):
@@ -200,22 +213,26 @@ def handleResults(results, domWords, type):
         id = 'Aid'
 
     found = []
+    add = False
+
     # add all the results to the list.
     for r in results:
         if domWords == 'single':
-            add = checkSingle(r)
-            if not add:
+
+            # if there is only one then we are going to add it without checking and hope its right
+            if len(results) == 1:
+                found.append(id[0] + str(r[id]))
                 break
-        found.append(id[0] + str(r[id]))
+
+            add = checkSingle(r)
+        if add or domWords == 'multiple':
+            found.append(id[0] + str(r[id]))
 
     # if there is only one result then checkDups returns an empty list
-    if domWords != 'single':
-        dups = checkDups(found)
-        if dups > 1:
-            dups.insert(0, "flag")
-    else:
-        dups = found
-    return dups
+
+
+    return found
+
 
 def dictfetchall(cursor):
     columns = [col[0] for col in cursor.description]
@@ -239,6 +256,8 @@ def checkSingle(r):
     for n in name.split(' '):
         if (checkDominant(n)):
             count += 1
+            if count >= 2:
+                break
 
     if (count == 1):
         return True
@@ -246,12 +265,19 @@ def checkSingle(r):
 
 # The compares the passed in word to the list to omit against and
 # returns true if the word is dominant and false if it isnt
-def checkDominant(part):
-    for o in omit_list:
-        if (part == o or len(part) < 3):
-            return False
-    return True
+if __name__ == '__main__':
+    if __name__ == '__main__':
+        def checkDominant(part):
+            for o in omit_list:
+                if (part == o or len(part) < 3):
+                    return False
+            return True
 
+
+
+         #TODO start working on mtb project matches
+        # method should be nearly identical if not the same
+        # won't need to check for areas though
 
 '''
 # this will preform the match for mtbProj

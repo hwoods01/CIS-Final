@@ -34,10 +34,10 @@ def all(request):
     #rebuildmtbp()
     #rebuildTf()
 
-    area = "Wichita"
-    state = "Kansas"
+    area = "Crested Butte"
+    state = "Colorado"
 
-#    makeRequest(area, state)
+    #makeRequest(area, state)
     matchController(area, state)
 
 
