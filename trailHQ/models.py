@@ -27,7 +27,7 @@ class MtbProjStateId(models.Model):
 
 
 class MtbProjTrailId(models.Model):
-    trailId=models.IntegerField(primary_key=True)
+    mtrailId=models.IntegerField(primary_key=True)
     name = models.TextField()
     stateId=models.ForeignKey('MtbProjStateId')
 
@@ -47,3 +47,11 @@ class TFid(models.Model):
     name = models.TextField()
     trail_id = models.IntegerField(default=None)
     url = models.TextField()
+
+
+class Matches(models.Model):
+    SingleTracksId = models.ForeignKey('SingleTracksTrail')
+    TfTrailId = models.ForeignKey('Tfid')
+    TfAreaId = models.ForeignKey('TfStateArea')
+    MTrailId = models.ForeignKey('MtbProjTrailId')
+    duplicates = models.BooleanField()

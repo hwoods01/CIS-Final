@@ -18,6 +18,7 @@ state = ""
 querylist = {
     'area': "select * from trailHQ_tfstatearea  tfa join trailHQ_tfstate  tfs on tfa.stateId_id = tfs.Sid where tfa.riding_area LIKE %s AND tfs.state_name = %s",
     'trail':  "select * from trailHQ_tfid tf join trailHQ_tfstatearea tfa on tf.areaId_id = tfa.Aid join trailHQ_tfstate tfs on tfa.stateId_id = tfs.Sid where tf.name LIKE %s and tfs.state_name = %s",
+    'mtrail': "select * from trailHQ_mtbprojtrailid mtt	join trailHQ_mtbprojstateid mts on mtt.stateId_id = mts.state_id where mtt.name LIKE %s and  mts.state_name = %s;"
 }
 
 
@@ -117,32 +118,37 @@ def matchForks(searchNames, foundMatches, state):
 
     for trail in searchNames:
 
-        found = []
+        tffound = []
+        mfound = []
         # getting the id of the singletracks trail for matching.
         elems = len(trail)
         trailId = trail[elems - 1]
 
         # the trail has multiple dominant strings
         if elems > 2:
-            found = tfQuery('trail', trail, state, 'multiple')
+            tffound = Query('trail', trail, state, 'multiple')
 
 
-            if len(found) < 1:
-                found = tfQuery('area', trail, state, 'multiple')
+            if len(tffound) < 1:
+                tffound = Query('area', trail, state, 'multiple')
 
-
+            mfound = Query('mtrail', trail, state, 'multiple')
         # there is just one dominant string which requires being handled a bit different
         else:
-            found = tfQuery('trail', trail, state, 'single')
+            tffound = Query('trail', trail, state, 'single')
 
 
-            if len(found) < 1:
-                found = tfQuery('area', trail, state, 'single')
+            if len(tffound) < 1:
+                tffound = Query('area', trail, state, 'single')
 
 
 
+            mfound = Query('mtrail', trail, state, 'single')
         # put the all the duplicate matches (hopefully one) to be with singletracks id
-        foundMatches[trailId] = found
+        foundMatches[trailId] = []
+        foundMatches[trailId].append(tffound)
+        foundMatches[trailId].append(mfound)
+
     return foundMatches
 
 
@@ -151,7 +157,7 @@ def checkDups(found):
     return dups
 
 
-def tfQuery(type, trail, state, domWords):
+def Query(type, trail, state, domWords):
 
     try:
         # list to store results in
@@ -189,7 +195,7 @@ def tfQuery(type, trail, state, domWords):
                 dups = found
 
             if dups == []:
-                print("Couldn't match: " )
+                print(type + ": Couldn't match: " )
                 for p in trail: print(p)
                 return []
 
@@ -209,6 +215,8 @@ def handleResults(results, domWords, type):
     id = ""
     if type == 'trail':
         id = 'Tid'
+    elif type == 'mtrail':
+        id = 'trailId'
     else:
         id = 'Aid'
 
@@ -265,27 +273,36 @@ def checkSingle(r):
 
 # The compares the passed in word to the list to omit against and
 # returns true if the word is dominant and false if it isnt
-if __name__ == '__main__':
-    if __name__ == '__main__':
-        def checkDominant(part):
-            for o in omit_list:
-                if (part == o or len(part) < 3):
-                    return False
-            return True
+
+def checkDominant(part):
+   for o in omit_list:
+       if (part == o or len(part) < 3):
+            return False
+   return True
 
 
 
-         #TODO start working on mtb project matches
-        # method should be nearly identical if not the same
-        # won't need to check for areas though
-
-'''
-# this will preform the match for mtbProj
-#def matchMTBP():
 
 # this will create the relational match for that table
-#def createMatch():
+def createMatch(matches):
+    for key, list in matches.items():
+        list.sort(reverse=True)
+        dups = False
+        count =0
+        for b in list[0]:
 
+            if b == 'flag':
+                dups = True
+
+            if list[1][count]:
+
+
+
+
+
+
+
+'''
 spacex/
 
 
