@@ -2,7 +2,7 @@
 
 
 from trailHQ.models import MtbProjStateId, MtbProjTrailId
-from trailHQ.models import SingletracksTrail
+from trailHQ.models import SingletracksTrail, Matches
 from trailHQ.models import TFState, TFStateArea, TFid
 from collections import Counter
 
@@ -189,7 +189,7 @@ def Query(type, trail, state, domWords):
             if domWords != 'single':
                 dups = checkDups(found)
                 if len(dups) > 1:
-                    dups.insert(0, "flag")
+                    dups.append("flag")
                     print("flag")
             else:
                 dups = found
@@ -289,12 +289,57 @@ def createMatch(matches):
         list.sort(reverse=True)
         dups = False
         count =0
-        for b in list[0]:
 
-            if b == 'flag':
-                dups = True
+        max2 = len(list[1])
+        temp = ""
+        if list[0][len(list[0]) - 1] == "flag":
+            dups = True
+        for id1 in list[0]:
 
-            if list[1][count]:
+            # if the count is greater than the number of elements in the second list then we just add the first value
+            if count > max2 -1:
+
+
+                makeInsert(key, id1, "", dups)
+
+            # there is an element in the second list
+            else:
+                # get the element in the second list
+                id2 = list[1][count]
+
+                makeInsert(key,id1,id2,dups)
+
+            count += 1
+
+
+
+
+def makeInsert(singleID, id1, id2, duplicates):
+
+    firstChar = id1[0]
+
+    if id2 == "":
+        if firstChar == 'T'
+            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId=id1[1:], TfAreaId="", MTrailId="",
+                                        duplicates=duplicates)
+        else:
+            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId="", TfAreaId=id1[1:], MTrailId="",
+                                         duplicates=duplicates)
+    elif firstChar == 'T' or firstChar== 'A':
+        if firstChar == 'T':
+            Matches.objects.update_or_create(SingleTracksId = singleID, TfTrailId = id1[1:], TfAreaId = "", MTrailId = id2[1:], duplicates= duplicates)
+        else :
+            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId="", TfAreaId=id1[1:], MTrailId=id2[1:],
+                                             duplicates=duplicates)
+
+    else:
+        char = id2[0]
+        if char == 'T':
+            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId=id2[1:], TfAreaId="", MTrailId=id1[1:],
+                                             duplicates=duplicates)
+        else:
+            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId="", TfAreaId=id2[1:], MTrailId=id1[1:],
+                                             duplicates=duplicates)
 
 
 
