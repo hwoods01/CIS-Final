@@ -46,7 +46,7 @@ def matchController(areaName, state):
 
     searchTrails = buildMatchStrings(trails)
     matches = matchForks(searchTrails, matches, state.lower())
-
+    createMatch(matches)
     for m in matches:
         print(m)
 
@@ -216,7 +216,7 @@ def handleResults(results, domWords, type):
     if type == 'trail':
         id = 'Tid'
     elif type == 'mtrail':
-        id = 'trailId'
+        id = 'mtrailId'
     else:
         id = 'Aid'
 
@@ -292,24 +292,25 @@ def createMatch(matches):
 
         max2 = len(list[1])
         temp = ""
-        if list[0][len(list[0]) - 1] == "flag":
-            dups = True
-        for id1 in list[0]:
+        if len(list[0]) != 0:
+            if list[0][len(list[0]) - 1] == "flag":
+                dups = True
+            for id1 in list[0]:
 
-            # if the count is greater than the number of elements in the second list then we just add the first value
-            if count > max2 -1:
+                # if the count is greater than the number of elements in the second list then we just add the first value
+                if count > max2 -1:
 
 
-                makeInsert(key, id1, "", dups)
+                    makeInsert(key, id1, "", dups)
 
-            # there is an element in the second list
-            else:
-                # get the element in the second list
-                id2 = list[1][count]
+                # there is an element in the second list
+                else:
+                    # get the element in the second list
+                    id2 = list[1][count]
 
-                makeInsert(key,id1,id2,dups)
+                    makeInsert(key,id1,id2,dups)
 
-            count += 1
+                count += 1
 
 
 
@@ -319,27 +320,29 @@ def makeInsert(singleID, id1, id2, duplicates):
     firstChar = id1[0]
 
     if id2 == "":
-        if firstChar == 'T'
-            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId=id1[1:], TfAreaId="", MTrailId="",
+        if firstChar == 'T':
+            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId=int(id1[1:]), TfAreaId="", MTrailId="",
                                         duplicates=duplicates)
         else:
-            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId="", TfAreaId=id1[1:], MTrailId="",
+            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId="", TfAreaId=int(id1[1:]), MTrailId="",
                                          duplicates=duplicates)
     elif firstChar == 'T' or firstChar== 'A':
         if firstChar == 'T':
-            Matches.objects.update_or_create(SingleTracksId = singleID, TfTrailId = id1[1:], TfAreaId = "", MTrailId = id2[1:], duplicates= duplicates)
+            Matches.objects.update_or_create(SingleTracksId = singleID, TfTrailId = int(id1[1:]), TfAreaId = "", MTrailId = int(id2[1:]), duplicates= duplicates)
         else :
-            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId="", TfAreaId=id1[1:], MTrailId=id2[1:],
+            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId="", TfAreaId=int(id1[1:]), MTrailId=int(id2[1:]),
                                              duplicates=duplicates)
 
     else:
         char = id2[0]
+        int1 = int(id1[1:])
+        int2 = int(id2[1:])
         if char == 'T':
-            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId=id2[1:], TfAreaId="", MTrailId=id1[1:],
-                                             duplicates=duplicates)
+            tf =TFid.get(Tid = int2)
+            mproj = MtbProjTrailId(mtrailId = int1)
+            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId=tf, MTrailId=mproj, duplicates=duplicates)
         else:
-            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId="", TfAreaId=id2[1:], MTrailId=id1[1:],
-                                             duplicates=duplicates)
+            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId="", TfAreaId=int(id2[1:]), MTrailId=int(id1[1:]),duplicates=duplicates)
 
 
 

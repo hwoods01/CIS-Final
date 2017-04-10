@@ -3,7 +3,7 @@
 import requests
 from bs4 import BeautifulSoup
 from trailHQ.models import SingletracksTrail
-
+import re
 
 
 
@@ -43,7 +43,7 @@ def makeRequest(city, state):
         print(e)
 
 
-'''This takes the response from the api and parses it.
+'''This takes the response from the api and parses it.sanatized_trail =
     Once done parsing it will read into the database
     In the future this will probably do some other work in the future'''
 def parseRequest(response):
@@ -57,16 +57,17 @@ def parseRequest(response):
             lon = i['lon']
             for j in i['activities']:
                 name = j['name']
+                sanatized_name = re.sub(r'([^\s\w]|_)+', '', name)
                 desc = j['description']
                 length = j['length']
                 url = j['url']
                 rating = j['rating']
-                print(lat, lon, name, desc, length, url, rating)
+                print(lat, lon, sanatized_name, desc, length, url, rating)
                 difficulty = getSingletrackRating(url)
                 if(difficulty == None):
                     difficulty = "Unknown"
 
-                SingletracksTrail.objects.update_or_create(city=i['city'], state=i['state'], name=j['name'], longitude=i['lon'],latitude=i['lat'], description=j['description'],url=j['url'],length=j['length'], rating=j['rating'], difficulty= difficulty)
+                SingletracksTrail.objects.update_or_create(city=i['city'], state=i['state'], name=sanatized_name, longitude=lon,latitude=lat, description=desc,url=url,length=length, rating=rating, difficulty= difficulty)
 
 
     except Exception as e:
