@@ -1,13 +1,10 @@
-# coding: interpy
-
 
 from trailHQ.models import MtbProjStateId, MtbProjTrailId
 from trailHQ.models import SingletracksTrail, Matches
 from trailHQ.models import TFState, TFStateArea, TFid
 from collections import Counter
-
 from django.db import connection
-from collections import namedtuple
+
 
 omit_list=  [ 'the', 'in', 'trail', 'and', 'for', 'tr', 'park' , 'creek', 'loop']
 word =""
@@ -34,7 +31,7 @@ querylist = {
     # create match database from that and store id's of trails found from all 3 databases with trail name from singletracks as master name
 
 
-# this will handle all the functioncalls for the other methods
+# this will handle all the function calls for the other methods
 def matchController(areaName, state):
     trails = SingletracksTrail.objects.filter(city__iexact = areaName, state__iexact = state)
 
@@ -47,33 +44,14 @@ def matchController(areaName, state):
     searchTrails = buildMatchStrings(trails)
     matches = matchForks(searchTrails, matches, state.lower())
     createMatch(matches)
-    for m in matches:
-        print(m)
-
-
-'''
- Going to focus on getting trail name matches working first
-
-# this will attempt to get a list of trails from that area,
-def matchArea(areaName,state):
-    areaParts = areaName.split(' ')
-
-    # this will always be list
-    areaTrails = TFid.objects.filter()
-'''
 
 # this will search for previously matched trails
-def getMatches(trails):
-     print("do work")
-     #TODO write table for storing matches
+def checkMatch (trail):
+    result = Matches.objects.get(SingleTracksId=trail)
 
-
-
-
-
-
-
-
+    if result == []:
+        return False
+    else: return True
 
 # builds the search lists, going to use them for both comparisons so might as well separate it out.
 def buildMatchStrings(trails):
@@ -81,40 +59,31 @@ def buildMatchStrings(trails):
     partsToSearch = []
     for tr in trails:
 
-        trName = tr.name.lower()
+        # if the match already exists then we won't do any work to make a new match
+        if checkMatch(tr.key) == False:
+            trName = tr.name.lower()
 
-        #if trName == 'reno / flag / bear / deadman loop':
-            #print('break')
-        # split the name up if it's multiple words
-        for part in trName.split(' '):
+            #if trName == 'reno / flag / bear / deadman loop':
+                #print('break')
+            # split the name up if it's multiple words
+            for part in trName.split(' '):
 
 
-            add = checkDominant(part)
+                add = checkDominant(part)
 
-            if(add):
-                partsToSearch.append(part)
-        if (partsToSearch != []):
-            # appending the id to the last item of the list, to ensure all matches are found and we can keep track of the order
-            partsToSearch.append(tr.key)
+                if(add):
+                    partsToSearch.append(part)
+            if (partsToSearch != []):
+                # appending the id to the last item of the list, to ensure all matches are found and we can keep track of the order
+                partsToSearch.append(tr.key)
 
-            searchNames.append(partsToSearch)
-        partsToSearch = []
+                searchNames.append(partsToSearch)
+            partsToSearch = []
 
     return searchNames
 
-
-# Method:
-#   check trail,
-#   check no s
-#       check area
-#       check no area s
-
-
-
-
+# method for handling of how were going to make queries and adding results to the match list
 def matchForks(searchNames, foundMatches, state):
-
-
 
     for trail in searchNames:
 
@@ -144,6 +113,7 @@ def matchForks(searchNames, foundMatches, state):
 
 
             mfound = Query('mtrail', trail, state, 'single')
+
         # put the all the duplicate matches (hopefully one) to be with singletracks id
         foundMatches[trailId] = []
         foundMatches[trailId].append(tffound)
@@ -151,12 +121,12 @@ def matchForks(searchNames, foundMatches, state):
 
     return foundMatches
 
-
+# takes the list of results and returns just the duplicates
 def checkDups(found):
     dups = [k for k, v in Counter(found).items() if v > 1]
     return dups
 
-
+# makes the query for the results of the word passed
 def Query(type, trail, state, domWords):
 
     try:
@@ -237,11 +207,9 @@ def handleResults(results, domWords, type):
             found.append(id[0] + str(r[id]))
 
     # if there is only one result then checkDups returns an empty list
-
-
     return found
 
-
+# returns the results as a dictionary so you can grab by column name
 def dictfetchall(cursor):
     columns = [col[0] for col in cursor.description]
     return [
@@ -249,12 +217,6 @@ def dictfetchall(cursor):
         for row in cursor.fetchall()
     ]
 
-# IDEA
-# Do a normal like query
-#   see if the resulting trail name would only have one dominant string
-
-
-#
 
 
 def checkSingle(r):
@@ -273,15 +235,11 @@ def checkSingle(r):
 
 # The compares the passed in word to the list to omit against and
 # returns true if the word is dominant and false if it isnt
-
 def checkDominant(part):
    for o in omit_list:
        if (part == o or len(part) < 3):
             return False
    return True
-
-
-
 
 # this will create the relational match for that table
 def createMatch(matches):
@@ -312,82 +270,57 @@ def createMatch(matches):
 
                 count += 1
 
-
-
-
+# inserts the matching ids into the matches table
 def makeInsert(singleID, id1, id2, duplicates):
-
+    single = SingletracksTrail.objects.get(key = singleID)
     firstChar = id1[0]
 
-    if id2 == "":
-        if firstChar == 'T':
-            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId=int(id1[1:]), TfAreaId="", MTrailId="",
-                                        duplicates=duplicates)
+    # grab everything but the first character and convert to int
+    int1 = int(id1[1:])
+
+    try:
+        # List 2 didn't have any results
+        if id2 == "":
+
+            if firstChar == 'T':
+                tf = TFid.objects.get(Tid=int1)
+                Matches.objects.update_or_create(SingleTracksId=single, TfTrailId=tf, duplicates=duplicates)
+            else:
+                tfA = TFStateArea.objects.get(Aid = int1)
+                Matches.objects.update_or_create(SingleTracksId=single, TfAreaId=tfA, duplicates=duplicates)
+
+        # if the first list has a T or A as the beginning character
+        elif firstChar == 'T' or firstChar== 'A':
+
+            int2 = int(id2[1:])
+            mproj = MtbProjTrailId(mtrailId=int2)
+
+            if firstChar == 'T':
+                tf = TFid.objects.get(Tid= int1)
+                Matches.objects.update_or_create(SingleTracksId = single, TfTrailId = tf, MTrailId = mproj, duplicates= duplicates)
+            else :
+                tfA = TFStateArea.objects.get(Aid=int1)
+                Matches.objects.update_or_create(SingleTracksId=single, TfAreaId=tfA, MTrailId=mproj, duplicates=duplicates)
+
+        # if neither of the above are true we know list 2 has the T or A(is a smaller list)
         else:
-            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId="", TfAreaId=int(id1[1:]), MTrailId="",
-                                         duplicates=duplicates)
-    elif firstChar == 'T' or firstChar== 'A':
-        if firstChar == 'T':
-            Matches.objects.update_or_create(SingleTracksId = singleID, TfTrailId = int(id1[1:]), TfAreaId = "", MTrailId = int(id2[1:]), duplicates= duplicates)
-        else :
-            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId="", TfAreaId=int(id1[1:]), MTrailId=int(id2[1:]),
-                                             duplicates=duplicates)
 
-    else:
-        char = id2[0]
-        int1 = int(id1[1:])
-        int2 = int(id2[1:])
-        if char == 'T':
-            tf =TFid.get(Tid = int2)
-            mproj = MtbProjTrailId(mtrailId = int1)
-            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId=tf, MTrailId=mproj, duplicates=duplicates)
-        else:
-            Matches.objects.update_or_create(SingleTracksId=singleID, TfTrailId="", TfAreaId=int(id2[1:]), MTrailId=int(id1[1:]),duplicates=duplicates)
+            char2 = id2[0]
+            int2 = int(id2[1:])
+            mproj = MtbProjTrailId.objects.get(mtrailId=int1)
 
+            # check to see if list 2 has the trail
+            if char2 == 'T':
+                tf =TFid.objects.get(Tid = int2)
+                Matches.objects.update_or_create(SingleTracksId=single, TfTrailId=tf, MTrailId=mproj, duplicates=duplicates)
 
+            # we know tf references an area
+            else:
+                tfA = TFStateArea.objects.get(Aid=int2)
+                Matches.objects.update_or_create(SingleTracksId=single, TfAreaId=tfA, MTrailId=mproj,duplicates=duplicates)
+    except Exception as e:
+        print(e)
+        print("Something went wrong making a match")
+        print("here are the ids of the matches")
+        print("SingleId: " + singleID + " ID1: " + id1 + " ID2: " + id2)
 
-
-
-
-
-'''
-spacex/
-
-
-# could probably combine the two functions but its not worth the effort currently
-def tfQuerySingle(type, trail, state):
-
-    id = ""
-    if type == 'trail':
-        id = 'Tid'
-    else:
-        id = 'Aid'
-    # list to store results in
-    found = []
-
-    # every word in trail except the last one because it is the id for singletracks
-    with connection.cursor() as cursor:
-        for word in trail[:-1]:
-            query = querylist[type]
-            params = ['%' + word + '%', state]
-            cursor.execute(query, params)
-            results = dictfetchall(cursor)
-            if results == []:
-
-                # if we didn't get any hits were going to try removing an 's' if it's the last character and trying again.
-                if word[len(word) - 1] == 's':
-                    word = word[:-1]
-                    query = querylist[type]
-                    params = ['%' + word + '%', state]
-                    cursor.execute(query, params)
-                    results = dictfetchall(cursor)
-
-            # can only enter if we have results
-            if results != []:
-
-                # add all the results to the list.
-                for r in results:
-
-                    if ()
-                    found.append(id[0] + str(r[id]))
-'''
