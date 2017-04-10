@@ -47,11 +47,11 @@ def matchController(areaName, state):
 
 # this will search for previously matched trails
 def checkMatch (trail):
-    result = Matches.objects.get(SingleTracksId=trail)
-
-    if result == []:
+    try:
+        Matches.objects.get(SingleTracksId=trail)
+        return True
+    except Matches.DoesNotExist:
         return False
-    else: return True
 
 # builds the search lists, going to use them for both comparisons so might as well separate it out.
 def buildMatchStrings(trails):
@@ -60,7 +60,7 @@ def buildMatchStrings(trails):
     for tr in trails:
 
         # if the match already exists then we won't do any work to make a new match
-        if checkMatch(tr.key) == False:
+        if checkMatch(tr) == False:
             trName = tr.name.lower()
 
             #if trName == 'reno / flag / bear / deadman loop':
@@ -244,16 +244,29 @@ def checkDominant(part):
 # this will create the relational match for that table
 def createMatch(matches):
     for key, list in matches.items():
-        list.sort(reverse=True)
+
+        # getting the list with bigger elements
+        # we need to ensure we get every element out of it
+        if len(list[0]) >= len(list[1]):
+            biggerList = list[0]
+            smallerList = list[1]
+        else:
+            biggerList = list[1]
+            smallerList = list[0]
+
         dups = False
         count =0
 
-        max2 = len(list[1])
+        max2 = len(smallerList)
         temp = ""
-        if len(list[0]) != 0:
-            if list[0][len(list[0]) - 1] == "flag":
+        if len(biggerList) != 0:
+            if biggerList[len(biggerList) - 1] == "flag":
                 dups = True
-            for id1 in list[0]:
+            for id1 in biggerList:
+
+                # if this happens then we're done
+                if id1 == "flag":
+                    break
 
                 # if the count is greater than the number of elements in the second list then we just add the first value
                 if count > max2 -1:
@@ -264,7 +277,7 @@ def createMatch(matches):
                 # there is an element in the second list
                 else:
                     # get the element in the second list
-                    id2 = list[1][count]
+                    id2 = smallerList[count]
 
                     makeInsert(key,id1,id2,dups)
 
@@ -285,6 +298,9 @@ def makeInsert(singleID, id1, id2, duplicates):
             if firstChar == 'T':
                 tf = TFid.objects.get(Tid=int1)
                 Matches.objects.update_or_create(SingleTracksId=single, TfTrailId=tf, duplicates=duplicates)
+            elif firstChar == 'm':
+                mproj = MtbProjTrailId.objects.get(mtrailId=int1)
+                Matches.objects.update_or_create(SingleTracksId = single, MTrailId=mproj, duplicates = duplicates)
             else:
                 tfA = TFStateArea.objects.get(Aid = int1)
                 Matches.objects.update_or_create(SingleTracksId=single, TfAreaId=tfA, duplicates=duplicates)
@@ -293,7 +309,7 @@ def makeInsert(singleID, id1, id2, duplicates):
         elif firstChar == 'T' or firstChar== 'A':
 
             int2 = int(id2[1:])
-            mproj = MtbProjTrailId(mtrailId=int2)
+            mproj = MtbProjTrailId.objects.get(mtrailId=int2)
 
             if firstChar == 'T':
                 tf = TFid.objects.get(Tid= int1)
@@ -322,5 +338,5 @@ def makeInsert(singleID, id1, id2, duplicates):
         print(e)
         print("Something went wrong making a match")
         print("here are the ids of the matches")
-        print("SingleId: " + singleID + " ID1: " + id1 + " ID2: " + id2)
+        print("SingleId: " + str(singleID) + " ID1: " + str(id1) + " ID2: " + str(id2))
 

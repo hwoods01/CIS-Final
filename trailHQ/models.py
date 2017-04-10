@@ -50,7 +50,7 @@ class TFid(models.Model):
 
 
 class Matches(models.Model):
-    SingleTracksId = models.ForeignKey('SingleTracksTrail', default=0)
+    SingleTracksId = models.ForeignKey('SingletracksTrail', default=0)
     TfTrailId = models.ForeignKey('Tfid', default=0)
     TfAreaId = models.ForeignKey('TfStateArea', default=0)
     MTrailId = models.ForeignKey('MtbProjTrailId',default=0)
