@@ -5,7 +5,7 @@ from trailHQ.utils.trailForks_helper import requestBuilder as rebuildTf
 from django.http import Http404
 from trailHQ.utils.mtbpr_build import requestBuilder as rebuildmtbp
 from django.template import RequestContext
-from trailHQ.utils.ST_Helper import makeRequest
+from trailHQ.utils.ST_Helper import makeRequest, tryFilter, STController
 from trailHQ.utils.matcher import matchController
 # Create your views here.
 
@@ -47,3 +47,17 @@ def all(request):
     print(trails.values())
     return render(request, 'trailHQ/all.html', {'trails': trails, 'tfs':tfs, 'mtbProj':mtbProj})
 
+def area(request):
+
+
+    area = "Crested Butte"
+    state = "Colorado"
+    trails = tryFilter(area,state)
+
+    if trails !=[]:
+        for trail in trails:
+            key = trail.key
+
+
+    else:
+        STController(area, state)

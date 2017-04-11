@@ -13,8 +13,14 @@ activity_string = 'q[activities_activity_type_name_eq]=mountain+biking'
 country_string = 'q[country_cont]=United States'
 headers = {'X-Mashape-Key': 'Li4lO5svuRmshPnqogrJpkOC4KxAp1kej3ijsnXCRbpxawhJ5f', 'Accept': 'text/plain'}
 
+def tryFilter(city, state):
+    return SingletracksTrail.objects.filter(city = city, state = state)
 
 #https://trailapi-trailapi.p.mashape.com/?lat=34.1&limit=25&lon=-105.2&q[activities_activity_type_name_eq]=mountain+biking&q[city_cont]=Wichita&q[country_cont]=United+States&q[state_cont]=Kansas&radius=50
+
+def STController(city, state):
+    r =makeRequest(city, state)
+    parseRequest(r)
 
 '''
 This method makes the response to the Singletracks API using the city and state variables passed in
@@ -23,22 +29,12 @@ right now that is the only way a request will be made
 def makeRequest(city, state):
     city_string = "q[city_cont]=#{city}"
     state_string = "q[state_cont]=#{state}"
-    print(city_string)
     unformreq = SingleTracksURL + '?' + activity_string + '&' + city_string + '&'+ state_string + '&' + country_string +'&' + radius
-    print(headers)
-    print(unformreq)
 
     try:
         r=requests.get(unformreq, headers=headers)
-        parseRequest(r)
-        #print(r)
+        return r
 
-        #foreach[places]
-            #[lat][lon]
-            # foreach[activities]:
-                # [name],[description], [length] [url], [rating]
-
-            # TODO use url to get difficulty
     except Exception as e:
         print(e)
 

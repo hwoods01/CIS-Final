@@ -48,8 +48,10 @@ def matchController(areaName, state):
 # this will search for previously matched trails
 def checkMatch (trail):
     try:
-        Matches.objects.get(SingleTracksId=trail)
-        return True
+        if Matches.objects.filter(SingleTracksId=trail) == []:
+            return False
+        else:
+            return True
     except Matches.DoesNotExist:
         return False
 
