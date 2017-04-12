@@ -20,7 +20,8 @@ def tryFilter(city, state):
 
 def STController(city, state):
     r =makeRequest(city, state)
-    parseRequest(r)
+    response = parseRequest(r)
+    return response
 
 '''
 This method makes the response to the Singletracks API using the city and state variables passed in
@@ -48,7 +49,10 @@ def parseRequest(response):
     try:
         #this is prime terrirtory for async for loop
         json_content = response.json()
+        if json_content['places'] == []:
+            return False
         for i in json_content['places']:
+
             lat = i['lat']
             lon = i['lon']
             for j in i['activities']:
@@ -64,7 +68,7 @@ def parseRequest(response):
                     difficulty = "Unknown"
 
                 SingletracksTrail.objects.update_or_create(city=i['city'], state=i['state'], name=sanatized_name, longitude=lon,latitude=lat, description=desc,url=url,length=length, rating=rating, difficulty= difficulty)
-
+        return True
 
     except Exception as e:
 

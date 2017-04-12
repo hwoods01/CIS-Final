@@ -3,7 +3,7 @@ from trailHQ.models import MtbProjStateId, MtbProjTrailId
 from trailHQ.models import SingletracksTrail, Matches
 from trailHQ.models import TFState, TFStateArea, TFid
 from collections import Counter
-from django.db import connection
+from trailHQ.utils.query import makeQuery
 
 
 omit_list=  [ 'the', 'in', 'trail', 'and', 'for', 'tr', 'park' , 'creek', 'loop']
@@ -136,43 +136,41 @@ def Query(type, trail, state, domWords):
         found = []
 
         # every word in trail except the last one because it is the id for singletracks
-        with connection.cursor() as cursor:
-            for word in trail[:-1]:
-                if word == 'strand':
-                    print("break")
-                query = querylist[type]
-                params = ['%'+word+'%',state]
-                cursor.execute(query,params)
-                results = dictfetchall(cursor)
-                if results == []:
 
-                    # if we didn't get any hits were going to try removing an 's' if it's the last character and trying again.
-                    if word[len(word) - 1] == 's':
-                        word = word[:-1]
-                        query = querylist[type]
-                        params = ['%'+word+'%', state]
-                        cursor.execute(query, params)
-                        results = dictfetchall(cursor)
+        for word in trail[:-1]:
+            if word == 'strand':
+                print("break")
+            params = ['%'+word+'%',state]
+            results = makeQuery(type, params)
 
-                # can only enter if we have results
-                if results != []:
-                    found += handleResults(results, domWords, type)
+            if results == []:
 
-            if domWords != 'single':
-                dups = checkDups(found)
-                if len(dups) > 1:
-                    dups.append("flag")
-                    print("flag")
-            else:
-                dups = found
-
-            if dups == []:
-                print(type + ": Couldn't match: " )
-                for p in trail: print(p)
-                return []
+                # if we didn't get any hits were going to try removing an 's' if it's the last character and trying again.
+                if word[len(word) - 1] == 's':
+                    word = word[:-1]
+                    params = ['%'+word+'%', state]
+                    results = makeQuery(type, params)
 
 
-            return dups
+            # can only enter if we have results
+            if results != []:
+               found += handleResults(results, domWords, type)
+
+        if domWords != 'single':
+            dups = checkDups(found)
+            if len(dups) > 1:
+                dups.append("flag")
+                print("flag")
+        else:
+            dups = found
+
+        if dups == []:
+            print(type + ": Couldn't match: " )
+            for p in trail: print(p)
+            return []
+
+
+        return dups
 
     except Exception as e:
         print("Failed matching\n")
@@ -211,13 +209,7 @@ def handleResults(results, domWords, type):
     # if there is only one result then checkDups returns an empty list
     return found
 
-# returns the results as a dictionary so you can grab by column name
-def dictfetchall(cursor):
-    columns = [col[0] for col in cursor.description]
-    return [
-        dict(zip(columns,row))
-        for row in cursor.fetchall()
-    ]
+
 
 
 
