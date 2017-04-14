@@ -8,6 +8,7 @@ from django.template import RequestContext
 from trailHQ.utils.ST_Helper import makeRequest, tryFilter, STController
 from trailHQ.utils.matcher import matchController
 from trailHQ.utils.query import makeQuery
+from trailHQ.utils.weather import GetWeather
 # Create your views here.
 
 def trail_detail(request, pk):
@@ -33,7 +34,7 @@ def all(request):
     type = 'AreaResults'
     area = "Crested Butte"
     state = "Colorado"
-
+    GetWeather(39.0693,-94.6716)
     results = makeQuery(type, [area, state])
 
     # if no results then were going to run the process to generate results
