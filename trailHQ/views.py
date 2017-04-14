@@ -29,40 +29,6 @@ def trail_detail(request, pk):
 
 def all(request):
 
-    ''' Uncommenting this will build more trail objects'''
-    #requestBuilder()
-
-    #rebuildmtbp()
-    #rebuildTf()
-
-    #rea = "Wichita"
-    #state = "Colorado"
-
-    #STController(area, state)
-    #matchController(area, state)
-
-    area(request)
-    '''
-    trails =  SingletracksTrail.objects.all()
-    mtbProj = MtbProjTrailId.objects.all()
-    tfs = TFid.objects.all()
-    print(trails.values())
-    #return render(request, 'trailHQ/all.html', {'trails': trails, 'tfs':tfs, 'mtbProj':mtbProj})'''
-
-
-'''
-
-sql = {"select st.name as Single, tfi.name as TrailForks, mtb.name as MPRoj, tfa.riding_area as TFArea from trailHQ_matches match
-	join trailHQ_singletrackstrail st on match.SingleTracksId_id =  st.key
-	left join trailHQ_tfid tfi on match.TfTrailId_id = tfi.Tid
-	left join trailHQ_mtbprojtrailid mtb on match.MTrailId_id = mtb.mtrailId
-	left join trailHQ_tfstatearea tfa on match.TfAreaId_id = tfa.riding_area
-	where st.city = 'Crested Butte' and st.state = 'Colorado' }'''
-
-queries = {"Area": "select st.key, st.name as SingleTracks, tfi.name as TrailForks, mtb.name as MtbProject, tfa.riding_area as TFArea from trailHQ_matches match join trailHQ_singletrackstrail st on match.SingleTracksId_id =  st.key left join trailHQ_tfid tfi on match.TfTrailId_id = tfi.Tid left join trailHQ_mtbprojtrailid mtb on match.MTrailId_id = mtb.mtrailId	left join trailHQ_tfstatearea tfa on match.TfAreaId_id = tfa.riding_area where (select key from trailHQ_singletrackstrail where city = %s and state = %s)"
-           }
-
-def area(request):
 
     type = 'AreaResults'
     area = "Crested Butte"
@@ -82,5 +48,33 @@ def area(request):
             return 404
     #results = makeQuery(type, [area, state])
     return render(request, 'trailHQ/area.html', {'results': results, 'area': area, 'state': state} )
+
+
+''' Uncommenting this will build more trail objects'''
+
+
+
+'''
+    trails =  SingletracksTrail.objects.all()
+    mtbProj = MtbProjTrailId.objects.all()
+    tfs = TFid.objects.all()
+    print(trails.values())
+    #return render(request, 'trailHQ/all.html', {'trails': trails, 'tfs':tfs, 'mtbProj':mtbProj})'''
+
+
+'''
+
+sql = {"select st.name as Single, tfi.name as TrailForks, mtb.name as MPRoj, tfa.riding_area as TFArea from trailHQ_matches match
+	join trailHQ_singletrackstrail st on match.SingleTracksId_id =  st.key
+	left join trailHQ_tfid tfi on match.TfTrailId_id = tfi.Tid
+	left join trailHQ_mtbprojtrailid mtb on match.MTrailId_id = mtb.mtrailId
+	left join trailHQ_tfstatearea tfa on match.TfAreaId_id = tfa.riding_area
+	where st.city = 'Crested Butte' and st.state = 'Colorado' }'''
+
+queries = {"Area": "select st.key, st.name as SingleTracks, tfi.name as TrailForks, mtb.name as MtbProject, tfa.riding_area as TFArea from trailHQ_matches match join trailHQ_singletrackstrail st on match.SingleTracksId_id =  st.key left join trailHQ_tfid tfi on match.TfTrailId_id = tfi.Tid left join trailHQ_mtbprojtrailid mtb on match.MTrailId_id = mtb.mtrailId	left join trailHQ_tfstatearea tfa on match.TfAreaId_id = tfa.riding_area where (select key from trailHQ_singletrackstrail where city = %s and state = %s)"
+           }
+
+
+
 
 

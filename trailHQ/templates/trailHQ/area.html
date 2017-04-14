@@ -3,13 +3,15 @@
 
 {% block content %}
     <div class="header">
-        <h1>area, state</h1>
+        <h1>{{ area }}, {{ state }} </h1>
     </div>
+    <h1> Made it here!</h1>
     <table>
         {% for dict in results %}
-            dict
+            {{dict}}
 
-        {% endfor %}
+        {%endfor%}
+
     </table>
 {% endblock %}
 
