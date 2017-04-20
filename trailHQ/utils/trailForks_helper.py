@@ -66,10 +66,8 @@ def buildTable(trails, state):
 
             # if it has an id, it's in the last spot of the area string
             area_id = tryConvert(split_area[length])
-            id = dbstate[0]._id
+            id = dbstate[0].Sid
             area = TFStateArea.objects.get_or_create(riding_area =area, stateId=dbstate[0])
-
-
 
 
 

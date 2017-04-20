@@ -9,6 +9,7 @@ from trailHQ.utils.ST_Helper import makeRequest, tryFilter, STController
 from trailHQ.utils.matcher import matchController
 from trailHQ.utils.query import makeQuery
 from trailHQ.utils.weather import GetWeather
+#from trailHQ.utils.generic_helper import combineDicts
 # Create your views here.
 
 def trail_detail(request, pk):
@@ -36,17 +37,13 @@ def all(request):
     state = "Colorado"
     GetWeather(39.0693,-94.6716)
     results = makeQuery(type, [area, state])
-
     # if no results then were going to run the process to generate results
     if results == []:
-        trails = STController(area, state)
-        if trails:
-            # this means we just added something to the database
-            matchController(area, state)
+        #trails = STController(area, state)
 
-        else :
-            # no results return 404
-            return 404
+        # this means we just added something to the database
+        matchController(area, state)
+    #combined = combineDicts(results)
     #results = makeQuery(type, [area, state])
     return render(request, 'trailHQ/area.html', {'results': results, 'area': area, 'state': state} )
 

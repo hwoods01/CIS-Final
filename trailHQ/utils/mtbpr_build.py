@@ -49,15 +49,13 @@ def requestBuilder():
 
 
 def buildTable(tuple_list, state, area_id):
-    mtbprojstate = MtbProjStateId(state_id= area_id, state_name= state)
-    mtbprojstate.save()
+    mtbprojstate = MtbProjStateId.objects.get_or_create(state_id= area_id, state_name= state)
     for tuple in tuple_list:
         id = tuple[0]
         name_no_space = tuple[1]
         # other websites don't use dashes, so this should make it easier to do queries on
         name_spaces = name_no_space.replace('-', ' ')
-        trail = MtbProjTrailId(trailId=id, name=name_spaces, stateId=mtbprojstate)
-        trail.save()
+        MtbProjTrailId.objects.update_or_create(mtrailId=id, name=name_spaces, stateId=mtbprojstate[0])
 
 
 

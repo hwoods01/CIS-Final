@@ -48,10 +48,11 @@ def matchController(areaName, state):
 # this will search for previously matched trails
 def checkMatch (trail):
     try:
-        if Matches.objects.filter(SingleTracksId=trail) == []:
-            return False
-        else:
+        match = Matches.objects.filter(SingleTracksId=trail)
+        if match.exists():
             return True
+        else:
+            return False
     except Matches.DoesNotExist:
         return False
 
@@ -237,6 +238,7 @@ def checkDominant(part):
 
 # this will create the relational match for that table
 def createMatch(matches):
+    insertCount = 0
     for key, list in matches.items():
 
         # getting the list with bigger elements
@@ -267,16 +269,16 @@ def createMatch(matches):
 
 
                     makeInsert(key, id1, "", dups)
-
+                    insertCount +=1
                 # there is an element in the second list
                 else:
                     # get the element in the second list
                     id2 = smallerList[count]
 
                     makeInsert(key,id1,id2,dups)
-
+                    insertCount+=1
                 count += 1
-
+    print (insertCount)
 # inserts the matching ids into the matches table
 def makeInsert(singleID, id1, id2, duplicates):
     single = SingletracksTrail.objects.get(key = singleID)
