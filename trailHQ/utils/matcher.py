@@ -163,6 +163,8 @@ def Query(type, trail, state, domWords):
                 dups.append("flag")
                 print("flag")
         else:
+            if len(found) > 1:
+                found.append("flag")
             dups = found
 
         if dups == []:

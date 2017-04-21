@@ -5,11 +5,64 @@
     <div class="header">
         <h1>{{ area }}, {{ state }} </h1>
     </div>
+    <div class="weather">
+        {% for k in weather %}
+            {{k}}
+
+        {%endfor%}
+    </div>
     <h1> Made it here!</h1>
     <table>
         {% for dict in results %}
-            {{dict}}
+        <div id="TrailMatch">
 
+            <h1>{{ dict.SingleTracks }}<h1>
+
+            {% if dict.duplicates %}
+                {% if dict.TrailForks|length > 1 %}
+
+                    <h3>Trailforks had more than one result</h3>
+                    {% for trail in dict.TrailForks %}
+                        {{ trail }}
+                    {% endfor %}
+
+                {% elif dict.TrailForks is not None %}
+                    {{ dict.TrailForks }}
+
+                {% endif %}
+
+                {% if dict.MtbProject|length > 1 %}
+
+                    <h3>Mtb Project returned more than one result</h3>
+                    {% for trail in dict.MtbProject %}
+                        {{ trail }}
+                    {% endfor %}
+
+                {% elif dict.MtbProject is not None %}
+                    {{ dict.MtbProject }}
+                {% endif %}
+
+                {% if dict.TFArea|length > 1 %}
+
+                    <h3>TrailForks Area returned more than one result</h3>
+                    {% for trail in dict.TFArea %}
+                        {{ trail }}
+                    {% endfor %}
+
+                {% elif dict.TFArea is not None %}
+                    {{ dict.TFArea }}
+
+
+                {% endif %}
+
+            {% else %}
+
+                {{dict.TrailForks}}
+                {{dict.MtbProject}}
+                {{dict.TFArea}}
+            {% endif %}
+
+        </div>
         {%endfor%}
 
     </table>
