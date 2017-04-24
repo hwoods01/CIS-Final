@@ -14,53 +14,54 @@
     <h1> Made it here!</h1>
     <table>
         {% for dict in results %}
-        <div id="TrailMatch">
+        <div class="Trail">
 
-            <h1>{{ dict.SingleTracks }}<h1>
+            <table class="TrailResults">
 
-            {% if dict.duplicates %}
-                {% if dict.TrailForks|length > 1 %}
+                <thead>{{dict.SingleTracks}}</thead>
 
-                    <h3>Trailforks had more than one result</h3>
-                    {% for trail in dict.TrailForks %}
-                        {{ trail }}
-                    {% endfor %}
+                {% if dict.duplicates %}
+                    {% if dict.TrailForks is not None %}
+                        <tr class="dupIDTF"><td>TrailForks had duplicates</td></tr>
+                        {% for trail in dict.TrailForks %}
+                            <tr class="TFDup"><td>{{ trail }}</td></tr>
+                        {% endfor %}
 
-                {% elif dict.TrailForks is not None %}
-                    {{ dict.TrailForks }}
 
+
+                    {% endif %}
+
+                    {% if dict.MtbProject is not None %}
+
+                        <tr class="dupIDMP"><td>Mtb Project returned more than one result</td></tr>
+                        {% for trail in dict.MtbProject %}
+                            <tr class="MPDup"><td>{{ trail }}</td></tr>
+                        {% endfor %}
+
+                    {% endif %}
+                    {% if dict.TFArea is not None %}
+
+                        <tr class="dupIDTA"><td>TrailForks Area returned more than one result</td></tr>
+                        {% for trail in dict.TFArea %}
+                            <tr class="TADup"><td>{{ trail }}</td></tr>
+                        {% endfor %}
+
+
+                    {% endif %}
+
+                {% else %}
+                    {% if dict.TrailForks is not None %}
+                        <tr class="TFSin"><td>{{dict.TrailForks}}</td></tr>
+                    {% endif %}
+                    {% if dict.MtbProject is not None %}
+                        <tr class="MPSin"><td>{{dict.MtbProject}}</td></tr>
+                    {% endif %}
+                    {% if dict.TFArea is not None %}
+                        <tr class="TASin"><td>{{dict.TFArea}}</td></tr>
+                    {% endif %}
                 {% endif %}
 
-                {% if dict.MtbProject|length > 1 %}
-
-                    <h3>Mtb Project returned more than one result</h3>
-                    {% for trail in dict.MtbProject %}
-                        {{ trail }}
-                    {% endfor %}
-
-                {% elif dict.MtbProject is not None %}
-                    {{ dict.MtbProject }}
-                {% endif %}
-
-                {% if dict.TFArea|length > 1 %}
-
-                    <h3>TrailForks Area returned more than one result</h3>
-                    {% for trail in dict.TFArea %}
-                        {{ trail }}
-                    {% endfor %}
-
-                {% elif dict.TFArea is not None %}
-                    {{ dict.TFArea }}
-
-
-                {% endif %}
-
-            {% else %}
-
-                {{dict.TrailForks}}
-                {{dict.MtbProject}}
-                {{dict.TFArea}}
-            {% endif %}
+            </table>
 
         </div>
         {%endfor%}

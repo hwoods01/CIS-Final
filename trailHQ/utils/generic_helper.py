@@ -1,87 +1,148 @@
 
+keyList = ["TrailForks", "MtbProject", "TFArea"]
 
+combineLists = [ [],[],[] ]
+idCombine = [ [], [], [] ]
 
 def combineDicts(results):
     combined = []
-    TF_to_combine = []
-    MP_to_combine = []
-    TA_to_combine = []
-    TFURL_to_combine =[]
-    MPID_to_combine = []
-    TAID_to_combine = []
 
-    id = None
+    starting_rowNum = 0
     dups = False
-    startingCountForDuplicate = 0
-    for rowNum in range(0, len(results)-1):
+    id = 0
+    for rowNum in range(0, len(results)):
 
-        if dups :
+        if dups:
 
-            # if this is true were going to add the list
+            # not done adding to the list
             if results[rowNum]["key"] == id:
-                if results[rowNum]["TrailForks"] != None:
-                    TF_to_combine.append(results[rowNum]["TrailForks"])
-                    TFURL_to_combine.append(results[rowNum]["TFURL"])
-                if results[rowNum]["MtbProject"] !=None:
-                    MP_to_combine.append(results[rowNum]["MtbProject"])
-                    MPID_to_combine.append(results[rowNum]["MPID"])
-                if results[rowNum]["TFArea"] != None:
-                    TA_to_combine.append(results[rowNum]["TFArea"])
-                    TAID_to_combine.append(results[rowNum]["TFAID"])
-
-                # clear that row from the list or at least don't add it do combine
+                for i in range(0,3):
+                   if checkDuplicate(keyList[i], results, rowNum):
+                       results[starting_rowNum][keyList[i]].append(results[rowNum][keyList[i]])
 
 
-            # this means that we've switched numbers so we reset and look for the next ones
+            # we are done with that trail duplicates
             else:
-                results[startingCountForDuplicate]["TrailForks"] =  TF_to_combine
-                results[startingCountForDuplicate]["MtbProject"] = MP_to_combine
-                results[startingCountForDuplicate]["TFArea"] = TA_to_combine
-                results[startingCountForDuplicate]["TFURL"] = TFURL_to_combine
-                results[startingCountForDuplicate]["MPID"] = MPID_to_combine
-                results[startingCountForDuplicate]["TFAID"] = TAID_to_combine
-                combined.append(results[startingCountForDuplicate])
+                combined.append(results[starting_rowNum])
 
-                # we've appended last duplicates now time to see if trail is duplicated
-
-                # clear the lists
-                TF_to_combine = []
-                MP_to_combine = []
-                TA_to_combine = []
-                TFURL_to_combine =[]
-                MPID_to_combine = []
-                TAID_to_combine =[]
-
-                # next trail is also duplicated so we set everything to it
                 if results[rowNum]["duplicates"] == True:
+                    starting_rowNum = rowNum
                     id = results[rowNum]["key"]
-                    startingCountForDuplicate = rowNum
-                    dups = True
-                    TF_to_combine.append(results[rowNum]["TrailForks"])
-                    MP_to_combine.append(results[rowNum]["MtbProject"])
-                    TA_to_combine.append(results[rowNum]["TFArea"])
-                    TFURL_to_combine.append(results[rowNum]["TFURL"])
-                    MPID_to_combine.append(results[rowNum]["MPID"])
-                    TAID_to_combine.append(results[rowNum]["TFAID"])
 
-                # next trail only has a single result
+                    for i in range(0,3):
+                        if checkDuplicate(keyList[i], results, rowNum):
+                            smallList = []
+                            smallList.append(results[starting_rowNum][keyList[i]])
+                            results[starting_rowNum][keyList[i]] = smallList
+
+
+
                 else:
-                    startingCountForDuplicate = 0
                     dups = False
-                    combined.append((results[rowNum]))
+                    combined.append(results[rowNum])
 
-         # we just found that the this is the first trail in the set to have duplicates
+
         elif results[rowNum]["duplicates"] == True:
-            id = results[rowNum]["key"]
+            starting_rowNum = rowNum
             dups = True
-            startingCountForDuplicate = rowNum
-            TF_to_combine.append(results[rowNum]["TrailForks"])
-            MP_to_combine.append(results[rowNum]["MtbProject"])
-            TA_to_combine.append(results[rowNum]["TFArea"])
-            TFURL_to_combine.append(results[rowNum]["TFURL"])
-            MPID_to_combine.append(results[rowNum]["MPID"])
-            TAID_to_combine.append(results[rowNum]["TFAID"])
+            id = results[rowNum]["key"]
+            for i in range(0,3):
+                if checkDuplicate(keyList[i], results, rowNum):
+                    smallList =[]
+                    smallList.append(results[starting_rowNum][keyList[i]])
+                    results[starting_rowNum][keyList[i]]= smallList
+
         else:
             combined.append(results[rowNum])
-
     return combined
+
+
+
+
+
+
+def checkDuplicate(key, results, num ):
+
+    value = results[num][key]
+    if value == None:
+        return False
+    else:
+        return True
+
+
+
+
+
+
+
+'''    id = None
+    dups = False
+    print(len(keyList))
+    startingCountForDuplicate = 0
+    for rowNum in range(0, len(results)):
+        for i in range(0, len(keyList) ):
+            if dups :
+
+                # if this is true were going to add the list
+                if results[rowNum]["key"] == id:
+                    if results[rowNum][keyList[i]] != None:
+                        combineLists[i].append(results[rowNum][keyList[i]])
+                        combineLists[i].append(results[rowNum][idList[i]])
+
+
+                    # clear that row from the list or at least don't add it do combine
+
+
+                # this means that we've switched numbers so we reset and look for the next ones
+                else:
+                    if combineLists[i] == [ None ]:
+                        combineLists[i] = None
+                        idCombine[i] = None
+
+                    results[startingCountForDuplicate][keyList[i]] =  combineLists[i]
+
+                    results[startingCountForDuplicate][idList[i]] = idCombine[i]
+
+                    combined.append(results[startingCountForDuplicate])
+
+                    # we've appended last duplicates now time to see if trail is duplicated
+
+                    # clear the lists
+                    combineLists[i] =[]
+                    idCombine[i]=[]
+
+                    # next trail is also duplicated so we set everything to it
+                    if results[rowNum]["duplicates"] == True:
+                        id = results[rowNum]["key"]
+                        startingCountForDuplicate = rowNum
+                        dups = True
+
+                        combineLists[i].append(results[rowNum][keyList[i]])
+                        idCombine[i].append(results[rowNum][idList[i]])
+
+
+                    # next trail only has a single result
+                    else:
+                        startingCountForDuplicate = 0
+                        dups = False
+                        if results[rowNum][keyList[i]] != None:
+                            combined.append((results[rowNum]))
+
+             # we just found that the this is the first trail in the set to have duplicates
+            elif results[rowNum]["duplicates"] == True:
+                id = results[rowNum]["key"]
+                dups = True
+                startingCountForDuplicate = rowNum
+                if results.append(results[rowNum][keyList[i]]) != None:
+                    combineLists[i].append(results[rowNum][keyList[i]])
+
+                    idCombine[i].append(results[rowNum][idList[i]])
+
+            else:
+                if results[rowNum][keyList[i]] == None :
+                    results[rowNum][keyList[i]] = None
+                    results[rowNum][idList[i]] = None
+
+        combined.append(results[rowNum])
+
+    return combined '''
