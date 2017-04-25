@@ -48,6 +48,28 @@ class TFid(models.Model):
     trail_id = models.IntegerField(default=None)
     url = models.TextField()
 
+class TFTrail(models.Model):
+    description = models.TextField()
+    difficulty = models.TextField()
+    lastReport = models.TextField()
+    id = models.ForeignKey('TFid', primary_key=True)
+    length = models.FloatField()
+    climb = models.IntegerField()
+    descent = models.IntegerField()
+    area = models.TextField()
+    trailType = models.TextField()
+
+class MtbProjTr (models.Model):
+    description = models.TextField()
+
+class TFArea(models.Model):
+    regionDesc = models.TextField()
+    regionDiff = models.TextField()
+    localTrailGroup = models.TextField()
+    length = models.FloatField()
+    vertical = models.IntegerField()
+    numTrails = models.IntegerField()
+    id = models.ForeignKey('TFStateArea', primary_key=True)
 
 class Matches(models.Model):
     SingleTracksId = models.ForeignKey('SingletracksTrail', default=0)

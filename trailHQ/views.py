@@ -1,28 +1,53 @@
 from django.shortcuts import render, get_object_or_404
 
-from .models import SingletracksTrail, TFid, TFStateArea, TFState,  MtbProjTrailId
+from .models import SingletracksTrail, TFid, TFStateArea, TFState,  MtbProjTrailId, TFTrail, TFArea
 from trailHQ.utils.trailForks_helper import requestBuilder as rebuildTf
 from django.http import Http404
 from trailHQ.utils.mtbpr_build import requestBuilder as rebuildmtbp
 from trailHQ.utils.ST_Helper import makeRequest, tryFilter, STController
 from trailHQ.utils.matcher import matchController
-from trailHQ.utils.query import makeQuery
+from trailHQ.utils.query import makeQuery, get_or_none
 from trailHQ.utils.weather import GetWeather
 from trailHQ.utils.generic_helper import combineDicts
+from trailHQ.utils.trailForks_helper import TFRequest
 #from trailHQ.utils.generic_helper import combineDicts
 # Create your views here.
 
+
+
 def trail_detail(request, pk):
-    try:
-        trail = SingletracksTrail.objects.filter(name__icontains=pk)
-        if trail:
-            print(trail.values())
-            return render(request, 'trailHQ/trail_detail.html', {'trails': trail})
-        else:
-            print("Not found")
-    except SingletracksTrail.DoesNotExist:
-        raise Http404("Does not extist")
-        #ST_Helper.makeRequest()
+    type = 'singtrail'
+
+    results = makeQuery(type, pk)
+
+    combine = combineDicts(results)
+    TF = []
+    TA = []
+    MP = []
+    if combine['MID'] != None:
+        for res in combine['MID']:
+            mtrail = get_or_none()
+            if mtrail == None:
+                #call mtbproject builder
+            MP.append(mtrail)
+        print('need to do something')
+    elif combine['TID'] != None:
+
+        for res in combine["TID"]:
+            tftrail =get_or_none(TFTrail, res)
+            if trail == None:
+                # make call to tf request
+            TF.append(tftrail)
+    elif combine['AID'] != None:
+
+        for res in combine['AID']:
+            area = get_or_none(TFArea, res)
+            if area == None:
+                #make call to tf request
+            TA.append(area)
+
+
+    return render(request, 'trailHQ/trail_detail.html')
 
 
 
@@ -37,6 +62,8 @@ def all(request):
     state = "Colorado"
     weather = GetWeather(39.0693,-94.6716)
     results = makeQuery(type, [area, state])
+    TFRequest('https://www.trailforks.com/region/miller-s-meadow-12543/','area', id)
+    TFRequest('https://www.trailforks.com/trails/trail-401/', 'test', id)
     # if no results then were going to run the process to generate results
     #if results == []:
         #trails = STController(area, state)

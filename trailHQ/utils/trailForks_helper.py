@@ -2,13 +2,12 @@
 
 import requests
 from bs4 import BeautifulSoup
-from trailHQ.models import TFState, TFStateArea, TFid
+from trailHQ.models import TFState, TFStateArea, TFid, TFTrail, TFArea
 import time
 from random import randint
 import random
 from trailHQ.models import TFState, TFStateArea, TFid
 
-import string
 import re
 
 
@@ -222,3 +221,65 @@ def tryConvert(stringConv):
            return convert
      except ValueError:
            return None
+
+
+
+def TFRequest(url, type, id):
+    try:
+
+        response = requests.get(url)
+
+
+        if type == 'area':
+            TArea(response.content, id)
+        else:
+            buildTrail(response.content, id)
+
+    except Exception as e:
+        print("Something happened making the request to trailforks")
+        print(e)
+
+
+def buildTrail(resp, id):
+
+    soup = BeautifulSoup(resp, 'html.parser')
+    basic_stats = soup.find(id='basicTrailStats')
+    stats =[]
+    for column in basic_stats.findAll("div", class_="large"):
+        stats.append(column.string)
+    info = soup.find(id='trail_info')
+    data = []
+    text = info.string
+    count = 0
+    for row in info.findAll("li"):
+        if count == 2:
+            break
+        defn = row.find("div", class_="definition")
+        str = re.sub('\s+', ' ', defn.text).strip()
+        data.append(str)
+        count +=1
+    descr = info.find('p', id='trail_description').text
+    TFTrail.objects.update_or_create(id=id, length=stats[0], climb=stats[1], descent=stats[2] , description=descr,area=data[0], difficulty=data[1], trailType=data[2])
+
+
+
+
+def TArea(resp, id):
+    soup = BeautifulSoup(resp, 'html.parser')
+
+    area = soup.find(id='region_area2')
+    descr = area.find(id="region_description").text
+    diffa = area.find('li', class_='stat')
+    spn = diffa.find_all('span')
+    diff =''
+    if spn[1].attrs['title'] != None:
+        diff = spn[1].attrs['title']
+    assoc = area.find_all('div', class_='clearfix')
+    club = assoc[0].text
+    club = re.sub('\s+',' ',club)
+    club = club.split(')')[0]
+    d =[]
+    for data in area.findAll('dd'):
+        d.append(data.text)
+
+    TFArea.objects.update_or_create(id=id, regionDesc=descr, regionDiff=diff, localTrailGroup=club, length=d[1], vertical=d[5], numTrails=d[0] )
