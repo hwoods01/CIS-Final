@@ -27,7 +27,7 @@
                     {% if dict.TrailForks is not None %}
                         <tr class="dupIDTF"><td>TrailForks had duplicates</td></tr>
                         {% for trail in dict.TrailForks %}
-                            <tr class="TFDup"><td>{{ trail }}</td></tr>
+                            <tr class="TFDup"><td><a href="{% url 'trail_detail' pk=dict.key %}">{{ trail }}</td></tr>
                         {% endfor %}
 
 
@@ -38,7 +38,7 @@
 
                         <tr class="dupIDMP"><td>Mtb Project returned more than one result</td></tr>
                         {% for trail in dict.MtbProject %}
-                            <tr class="MPDup"><td>{{ trail }}</td></tr>
+                            <tr class="MPDup"><td><a href="{% url 'trail_detail' pk=dict.key %}">{{ trail }}</td></tr>
                         {% endfor %}
 
                     {% endif %}
@@ -46,7 +46,7 @@
 
                         <tr class="dupIDTA"><td>TrailForks Area returned more than one result</td></tr>
                         {% for trail in dict.TFArea %}
-                            <tr class="TADup"><td>{{ trail }}</td></tr>
+                            <tr class="TADup"><td><a href="{% url 'trail_detail' pk=dict.key %}"></a> {{ trail }}</td></tr>
                         {% endfor %}
 
 
@@ -54,13 +54,13 @@
 
                 {% else %}
                     {% if dict.TrailForks is not None %}
-                        <tr class="TFSin"><td>{{dict.TrailForks}}</td></tr>
+                        <tr class="TFSin"><td><a href="{% url 'trail_detail' pk=dict.key %}">{{dict.TrailForks}}</td></tr>
                     {% endif %}
                     {% if dict.MtbProject is not None %}
-                        <tr class="MPSin"><td>{{dict.MtbProject}}</td></tr>
+                        <tr class="MPSin"><td><a href="{% url 'trail_detail' pk=dict.key %}">{{dict.MtbProject}}</td></tr>
                     {% endif %}
                     {% if dict.TFArea is not None %}
-                        <tr class="TASin"><td>{{dict.TFArea}}</td></tr>
+                        <tr class="TASin"><td><a href="{% url 'trail_detail' pk=dictkey %}">{{dict.TFArea}}</td></tr>
                     {% endif %}
                 {% endif %}
 

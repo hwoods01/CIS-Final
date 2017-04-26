@@ -21,48 +21,25 @@ def trail_detail(request, pk):
 
 
     type = 'singtrail'
-    results = makeQuery(type, pk)
-    if results[0]["DUPLICATES"] == True:
-        combined = combineDicts(results)
-        multipleController(combined)
-    else:
-        singleController(results)
+    results = makeQuery(type, [pk])
+    if results == None:
+        return Http404
+    singleController(results)
+
+    Sresults = makeQuery("STsing", [pk])
+    TFresults = makeQuery("TFsing", [pk])
+    TFAresults = makeQuery("TFAsing", [pk])
+    MBresults = makeQuery("MBsing", [pk])
+
+    return render(request, 'trailHQ/trail_detail.html', {'ST': Sresults[0], 'TF': TFresults, 'TFA': TFAresults, 'MTBP': MBresults})
 
 
 
-    '''
-    results = makeQuery(type, pk)
-
-    combine = combineDicts(results)
-    TF = []
-    TA = []
-    MP = []
-    if combine['MID'] != None:
-        for res in combine['MID']:
-            mtrail = get_or_none()
-            if mtrail == None:
-                #call mtbproject builder
-            MP.append(mtrail)
-        print('need to do something')
-    elif combine['TID'] != None:
-
-        for res in combine["TID"]:
-            tftrail =get_or_none(TFTrail, res)
-            if trail == None:
-                # make call to tf request
-            TF.append(tftrail)
-    elif combine['AID'] != None:
-
-        for res in combine['AID']:
-            area = get_or_none(TFArea, res)
-            if area == None:
-                #make call to tf request
-            TA.append(area)
 
 
-    return render(request, 'trailHQ/trail_detail.html')
 
-'''
+
+
 
 
 
@@ -71,7 +48,7 @@ def all(request):
 
     #buildTrail("", 1)
 
-    area = "crested "
+    area = "Crested Butte"
     state = "Colorado"
 
     combined = []
@@ -100,7 +77,7 @@ def all(request):
     #matchController(area, state)
     combined = combineDicts(results)
     #results = makeQuery(type, [area, state])
-
+    key = combined[0]["key"]
     return render(request, 'trailHQ/area.html', {'results': combined, 'area': area, 'state': state, 'weather': weather} )
 
 

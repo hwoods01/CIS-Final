@@ -226,8 +226,9 @@ def tryConvert(stringConv):
 
 def TFRequest(url, type, id):
     try:
+        url = url.replace(" ", "-")
         response = requests.get(url)
-        if type == 'AID':
+        if type == 'Aid':
 
             TArea(response.content, id)
         else:
@@ -257,15 +258,18 @@ def buildTrail(resp, id):
         data.append(str)
         count +=1
     descr = info.find('p', id='trail_description').text
-    TFTrail.objects.update_or_create(id=id, length=stats[0], climb=stats[1], descent=stats[2] , description=descr,area=data[0], difficulty=data[1], trailType=data[2])
-
+    try:
+        trail = TFid.objects.get(Tid=id)
+        TFTrail.objects.update_or_create(Tid=trail, length=stats[0], climb=stats[1], descent=stats[2] , description=descr,area=data[0], difficulty=data[1], avgTime = stats[3])
+    except TFid.DoesNotExist:
+        print("The trail object does not exist, something has gone terribly wrong")
 
 
 
 def TArea(resp, id):
     soup = BeautifulSoup(resp, 'html.parser')
 
-    area = soup.find(id='region_area2')
+    area = soup.find( id="region_area2")
     descr = area.find(id="region_description").text
     diffa = area.find('li', class_='stat')
     spn = diffa.find_all('span')
@@ -273,11 +277,16 @@ def TArea(resp, id):
     if spn[1].attrs['title'] != None:
         diff = spn[1].attrs['title']
     assoc = area.find_all('div', class_='clearfix')
-    club = assoc[0].text
-    club = re.sub('\s+',' ',club)
-    club = club.split(')')[0]
+    club = ''
+    if assoc != []:
+        club = assoc[0].text
+        club = re.sub('\s+',' ',club)
+        club = club.split(')')[0]
     d =[]
     for data in area.findAll('dd'):
         d.append(data.text)
-
-    TFArea.objects.update_or_create(id=id, regionDesc=descr, regionDiff=diff, localTrailGroup=club, length=d[1], vertical=d[5], numTrails=d[0] )
+    try:
+        area = TFStateArea.objects.get(Aid= id)
+        TFArea.objects.update_or_create(Aid=area, regionDesc=descr, regionDiff=diff, localTrailGroup=club, length=d[1], vertical=d[5], numTrails=d[0] )
+    except TFStateArea.DoesNotExist:
+        print("The state area does not exist")

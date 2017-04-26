@@ -157,9 +157,11 @@ def buildTrail(url, id):
     for org in parsed.find_all("p", class_="org"):
         orgList.append(org.text)
     orgs = ', '.join(orgList)
-
-    MtbProjTr.objects.update_or_create(id= id, description= descr, orgs= orgs, length=statList[0], ascent=statList[4], descent=statList[8], highElev=statList[12], lowElev=statList[16], avgGrade=statList[20], maxGrade=statList[21])
-
+    try:
+        trail = MtbProjTrailId.objects.get(mtrailId=id)
+        MtbProjTr.objects.update_or_create(Mid= trail, description= descr, orgs= orgs, length=statList[0], ascent=statList[4], descent=statList[8], highElev=statList[12], lowElev=statList[16], avgGrade=statList[20], maxGrade=statList[21])
+    except:
+        print("The mtbproject trail does not exist, somebody should slap the developer")
 
 def stripString(string):
     return re.sub('\s+', ' ', string).strip()
