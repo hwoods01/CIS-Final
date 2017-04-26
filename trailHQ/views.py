@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 
-from .models import SingletracksTrail, TFid, TFStateArea, TFState,  MtbProjTrailId, TFTrail, TFArea
+from .models import SingletracksTrail, TFid, TFStateArea, TFState,  MtbProjTrailId, TFTrail, TFArea, MtbProjTr
 from trailHQ.utils.trailForks_helper import requestBuilder as rebuildTf
 from django.http import Http404
 from trailHQ.utils.mtbpr_build import requestBuilder as rebuildmtbp, buildTrail
@@ -9,6 +9,7 @@ from trailHQ.utils.matcher import matchController
 from trailHQ.utils.query import makeQuery, get_or_none
 from trailHQ.utils.weather import GetWeather
 from trailHQ.utils.generic_helper import combineDicts
+from trailHQ.utils.detailBuilder import singleController, multipleController
 from trailHQ.utils.trailForks_helper import TFRequest
 #from trailHQ.utils.generic_helper import combineDicts
 # Create your views here.
@@ -17,8 +18,19 @@ from trailHQ.utils.trailForks_helper import TFRequest
 
 def trail_detail(request, pk):
 
-    '''type = 'singtrail'
 
+
+    type = 'singtrail'
+    results = makeQuery(type, pk)
+    if results[0]["DUPLICATES"] == True:
+        combined = combineDicts(results)
+        multipleController(combined)
+    else:
+        singleController(results)
+
+
+
+    '''
     results = makeQuery(type, pk)
 
     combine = combineDicts(results)
@@ -57,20 +69,34 @@ def trail_detail(request, pk):
 
 def all(request):
 
-    buildTrail("", 1)
-    type = 'AreaResults'
-    area = "Crested Butte"
+    #buildTrail("", 1)
+
+    area = "crested "
     state = "Colorado"
-    weather = GetWeather(39.0693,-94.6716)
+
+    combined = []
+    results = tryFilter(area, state)
+
+    # no call has been made to that location yet
+    if not results:
+        if STController(area, state):
+            matchController(area, state)
+            results = tryFilter(area, state)
+
+        # bad input
+        else:
+            return 404
+
+
+    trail = results[0]
+
+    weather = GetWeather(trail.latitude, trail.longitude)
+    type = 'AreaResults'
     results = makeQuery(type, [area, state])
 
     #TFRequest('https://www.trailforks.com/region/miller-s-meadow-12543/','area', id)
     #TFRequest('https://www.trailforks.com/trails/trail-401/', 'test', id)
-    # if no results then were going to run the process to generate results
-    #if results == []:
-        #trails = STController(area, state)
 
-        # this means we just added something to the database
     #matchController(area, state)
     combined = combineDicts(results)
     #results = makeQuery(type, [area, state])

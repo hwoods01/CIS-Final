@@ -53,7 +53,7 @@ class TFTrail(models.Model):
     difficulty = models.TextField()
     lastReport = models.TextField()
     id = models.ForeignKey('TFid', primary_key=True)
-    length = models.FloatField()
+    length = models.TextField()
     climb = models.IntegerField()
     descent = models.IntegerField()
     area = models.TextField()

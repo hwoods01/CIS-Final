@@ -226,11 +226,9 @@ def tryConvert(stringConv):
 
 def TFRequest(url, type, id):
     try:
-
         response = requests.get(url)
+        if type == 'AID':
 
-
-        if type == 'area':
             TArea(response.content, id)
         else:
             buildTrail(response.content, id)
