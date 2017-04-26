@@ -61,6 +61,15 @@ class TFTrail(models.Model):
 
 class MtbProjTr (models.Model):
     description = models.TextField()
+    id = models.ForeignKey('MtbProjTrailId', primary_key=True)
+    orgs = models.TextField()
+    length = models.TextField()
+    ascent = models.TextField()
+    descent = models.TextField()
+    highElev = models.TextField()
+    lowElev = models.TextField()
+    avgGrade = models.TextField()
+    maxGrade = models.TextField()
 
 class TFArea(models.Model):
     regionDesc = models.TextField()

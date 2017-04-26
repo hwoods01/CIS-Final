@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import SingletracksTrail, TFid, TFStateArea, TFState,  MtbProjTrailId, TFTrail, TFArea
 from trailHQ.utils.trailForks_helper import requestBuilder as rebuildTf
 from django.http import Http404
-from trailHQ.utils.mtbpr_build import requestBuilder as rebuildmtbp
+from trailHQ.utils.mtbpr_build import requestBuilder as rebuildmtbp, buildTrail
 from trailHQ.utils.ST_Helper import makeRequest, tryFilter, STController
 from trailHQ.utils.matcher import matchController
 from trailHQ.utils.query import makeQuery, get_or_none
@@ -16,7 +16,8 @@ from trailHQ.utils.trailForks_helper import TFRequest
 
 
 def trail_detail(request, pk):
-    type = 'singtrail'
+
+    '''type = 'singtrail'
 
     results = makeQuery(type, pk)
 
@@ -49,21 +50,22 @@ def trail_detail(request, pk):
 
     return render(request, 'trailHQ/trail_detail.html')
 
-
+'''
 
 
 
 
 def all(request):
 
-
+    buildTrail("", 1)
     type = 'AreaResults'
     area = "Crested Butte"
     state = "Colorado"
     weather = GetWeather(39.0693,-94.6716)
     results = makeQuery(type, [area, state])
-    TFRequest('https://www.trailforks.com/region/miller-s-meadow-12543/','area', id)
-    TFRequest('https://www.trailforks.com/trails/trail-401/', 'test', id)
+
+    #TFRequest('https://www.trailforks.com/region/miller-s-meadow-12543/','area', id)
+    #TFRequest('https://www.trailforks.com/trails/trail-401/', 'test', id)
     # if no results then were going to run the process to generate results
     #if results == []:
         #trails = STController(area, state)

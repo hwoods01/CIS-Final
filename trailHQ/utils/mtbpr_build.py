@@ -2,9 +2,10 @@
 
 import requests
 from bs4 import BeautifulSoup
-from trailHQ.models import MtbProjStateId, MtbProjTrailId
+from trailHQ.models import MtbProjStateId, MtbProjTrailId, MtbProjTr
 import time
 from random import randint
+import re
 
 
 
@@ -134,3 +135,31 @@ def parseRequest(response, num, name):
         return None
 
 
+
+
+def buildTrail(url, id):
+    url = "https://www.mtbproject.com/trail/346657"
+    response = requests.get(url)
+    html = response.content
+
+    parsed = BeautifulSoup(html, 'html.parser')
+
+    stats = parsed.find(id= "trail-stats-bar")
+    statList = []
+    for stat in stats.findAll("span"):
+        statList.append(stripString(stat.text))
+    # id's to take, [0, 4, 8, 12, 16, 20, 21]
+    # [length, ascent, descent, top, low elev, avg_grade, max grade]
+
+    orgList = []
+    descr = stripString(parsed.find("div", class_="body").text)
+
+    for org in parsed.find_all("p", class_="org"):
+        orgList.append(org.text)
+    orgs = ', '.join(orgList)
+
+    MtbProjTr.objects.update_or_create(id= id, description= descr, orgs= orgs, length=statList[0], ascent=statList[4], descent=statList[8], highElev=statList[12], lowElev=statList[16], avgGrade=statList[20], maxGrade=statList[21])
+
+
+def stripString(string):
+    return re.sub('\s+', ' ', string).strip()
