@@ -2,9 +2,175 @@
 
 {% block content %}
 
-    <h1>{{ST.name}}</h1>
 
+    <div class="container-fluid" id="singleTracks">
+        <h1>{{ST.name}}</h1>
+        <h2>SingleTracks Results</h2>
+        <div class="DescriptionDiv">
+            <p class="lead">Description:</p> <p>{{ ST.description }}</p>
+        </div>
+        <table class="table-condensed">
+            <tr class="tableHead">
+                <th>Trail Stats</th>
+            </tr>
+            <tr>
+                <td>Difficulty:</td>
+                <td>{{ ST.difficulty }}</td>
+            </tr>
+            <tr>
+                <td>Length (miles):</td>
+                <td> {{ ST.length }} </td>
+            </tr>
+            <tr>
+                <td>Rating:</td>
+                <td>{{ ST.rating }}</td>
+            </tr>
+        </table>
+        <a class="btn btn-default" href="{{ ST.url }}"> Think this webiste has the best info?! Click the link!</a>
+    </div>
+    {% if TF %}
+        <div class="container-fluid" id="TrailForks">
+        <h2>TrailForks Results</h2>
+        {% for dict in TF %}
+        <div class="container-fluidS" id="Tftrail">
 
+            <h3>{{ dict.TFName }}</h3>
+            <div class="DescriptionDiv">
+                <p class="lead">Description:</p>
+                <p>{{ dict.TFTDesc }}</p>
+            </div>
+            <table class="table-condensed">
+                <tr class="tableHead">
+                    <th>Trail Stats</th>
+                </tr>
+                <tr>
+                    <td>Area:</td>
+                    <td>{{ dict.TFTArea }}</td>
+                </tr>
+                <tr>
+                    <td>Difficulty:</td>
+                    <td>{{ dict.TFTDiff }}</td>
+                </tr>
+                <tr>
+                    <td>Length:</td>
+                    <td>{{ dict.TFTLength }} </td>
+                </tr>
+                <tr>
+                    <td>Climb:</td>
+                    <td>{{ dict.TFTClimb }}</td>
+                </tr>
+                <tr>
+                    <td>Descent:</td>
+                    <td>{{ dict.TFTDescent }}</td>
+                </tr>
+                <tr>
+                    <td>Last Report:</td>
+                    <td>{{ dict.TFTRepor }}</td>
+                </tr>
+
+            </table>
+            <a class="btn btn-default" href="{{ dict.url }}"> Think this webiste has the best info?! Click the link!</a>
+        </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if MTBP %}
+
+        <div class="container-fluid" id="MtbProject">
+            <h2>MtbProject Results</h2>
+        {% for dict in MTBP %}
+            <div class="container-fluid" id="Mtrail">
+            <h3>{{ dict.MName }}</h3>
+            <div class="DescriptionDiv">
+                <p class="lead">Description: </p>
+                <p>{{ dict.MDesc }}</p>
+            </div>
+            <table class="table-condensed">
+                <tr class="tableHead">
+                    <th>Trail Stats</th>
+                </tr>
+                <tr>
+                    <td>Length:</td>
+                    <td>{{ dict.MLen }} </td>
+                </tr>
+                <tr>
+                    <td>Climb:</td>
+                    <td>{{ dict.MAscent }}</td>
+                </tr>
+                <tr>
+                    <td>Descent:</td>
+                    <td>{{ dict.MDescent }}</td>
+                </tr>
+                <tr>
+                    <td>Highest Elevation:</td>
+                    <td>{{ dict.MHelev }}</td>
+                </tr>
+                <tr>
+                    <td>Lowest Elevation:</td>
+                    <td>{{ dict.MLelev }}</td>
+                </tr>
+                <tr>
+                    <td>Average Grade:</td>
+                    <td>{{ dict.MAGr }}</td>
+                </tr>
+                <tr>
+                    <td>Max Grade:</td>
+                    <td>{{ dict.MMGr }}</td>
+                </tr>
+                <tr>
+                    <td>Maintaince Organizations:</td>
+                    <td>{{ dict.MORgs }}</td>
+                </tr>
+            </table>
+            <a class="btn btn-default" href=""> Think this website has the best info?! Click the link!</a>
+
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if TFA %}
+        <div class="container-fluid" id="TrailForksArea">
+            <h2>TrailForks Area Results</h2>
+        {% for dict in TFA %}
+        <div class="container-fluid" id="Tfatrail">
+
+            <h3>{{ dict.Riding_Area }}</h3>
+            <div class="DescriptionDiv">
+                <p class="lead">Description:</p>
+                <p>{{ dict.TFADesc }}</p>
+            </div>
+            <table class="table-condensed">
+                <tr class="tableHead">
+                    <th>Trail Group Stats</th>
+                </tr>
+                <tr>
+                    <td>Difficulty:</td>
+                    <td>{{ dict.TFADiff }}</td>
+                </tr>
+                <tr>
+                    <td>Length:</td>
+                    <td>{{ dict.TFALen }} </td>
+                </tr>
+                <tr>
+                    <td>Number of trails:</td>
+                    <td>{{ dict.TFANum }}</td>
+                </tr>
+                <tr>
+                    <td>Vertical Change:</td>
+                    <td{{ dict.TFAVert }}</td>
+                </tr>
+                <tr>
+                    <td>Maintainers:</td>
+                    <td>{{ dict.TFAGroup }}</td>
+                </tr>
+            </table>
+            <a class="btn btn-default" href=""> Think this webiste has the best info?! Click the link!</a>
+        </div>
+        {% endfor %}
+        </div>
+    {% endif %}
 
 
 
