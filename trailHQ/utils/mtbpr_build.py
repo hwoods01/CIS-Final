@@ -159,7 +159,7 @@ def buildTrail(url, id):
     orgs = ', '.join(orgList)
     try:
         trail = MtbProjTrailId.objects.get(mtrailId=id)
-        MtbProjTr.objects.update_or_create(Mid= trail, description= descr, orgs= orgs, length=statList[0], ascent=statList[4], descent=statList[8], highElev=statList[12], lowElev=statList[16], avgGrade=statList[20], maxGrade=statList[21])
+        MtbProjTr.objects.update_or_create(Mid= trail, description= descr, orgs= orgs, length=statList[0], ascent=statList[4], descent=statList[8], highElev=statList[12], lowElev=statList[16], avgGrade=statList[20], maxGrade=statList[21], url=url)
     except:
         print("The mtbproject trail does not exist, somebody should slap the developer")
 

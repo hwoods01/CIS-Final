@@ -71,6 +71,7 @@ class MtbProjTr (models.Model):
     lowElev = models.TextField()
     avgGrade = models.TextField()
     maxGrade = models.TextField()
+    url = models.TextField()
 
 class TFArea(models.Model):
     regionDesc = models.TextField()
@@ -80,6 +81,7 @@ class TFArea(models.Model):
     vertical = models.TextField()
     numTrails = models.TextField()
     Aid = models.ForeignKey('TFStateArea', primary_key=True)
+    url = models.TextField()
 
 class Matches(models.Model):
     SingleTracksId = models.ForeignKey('SingletracksTrail', default=0)

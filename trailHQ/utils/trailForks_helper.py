@@ -230,7 +230,7 @@ def TFRequest(url, type, id):
         response = requests.get(url)
         if type == 'Aid':
 
-            TArea(response.content, id)
+            TArea(response.content, id, url)
         else:
             buildTrail(response.content, id)
 
@@ -257,7 +257,10 @@ def buildTrail(resp, id):
         str = re.sub('\s+', ' ', defn.text).strip()
         data.append(str)
         count +=1
-    descr = info.find('p', id='trail_description').text
+    tInfo = info.find('p', id='trail_description')
+    descr = ''
+    if tInfo != None:
+        descr = info.find('p', id='trail_description').text
     try:
         trail = TFid.objects.get(Tid=id)
         TFTrail.objects.update_or_create(Tid=trail, length=stats[0], climb=stats[1], descent=stats[2] , description=descr,area=data[0], difficulty=data[1], avgTime = stats[3])
@@ -266,7 +269,7 @@ def buildTrail(resp, id):
 
 
 
-def TArea(resp, id):
+def TArea(resp, id, url):
     soup = BeautifulSoup(resp, 'html.parser')
 
     area = soup.find( id="region_area2")
@@ -287,6 +290,6 @@ def TArea(resp, id):
         d.append(data.text)
     try:
         area = TFStateArea.objects.get(Aid= id)
-        TFArea.objects.update_or_create(Aid=area, regionDesc=descr, regionDiff=diff, localTrailGroup=club, length=d[1], vertical=d[5], numTrails=d[0] )
+        TFArea.objects.update_or_create(Aid=area, regionDesc=descr, regionDiff=diff, localTrailGroup=club, length=d[1], vertical=d[5], numTrails=d[0], url=url )
     except TFStateArea.DoesNotExist:
         print("The state area does not exist")
