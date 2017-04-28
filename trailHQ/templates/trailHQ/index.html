@@ -1,0 +1,28 @@
+{% extends 'trailHQ/base.html' %}
+
+{% block content %}
+
+    <form class="form-inline" action="area" method="get">
+        <div class="form-group">
+            <label for="city">City:</label>
+            <input id="city" type="form-control" name="city" value="{{ city }}">
+        </div>
+        <div class="form-group">
+            <label for="state">State:</label>
+            <input id="state" type="form-control" name="state" value="{{ state }}">
+        </div>
+
+        <div class="form-group">
+            <label for="radius">Radius:</label>
+            <input id="radius" type="form-control" name="radius" value="{{ radius }}">
+        </div>
+
+        <button type="submit" class="btn btn-default" value="Find Trails">Find Trails! </button>
+
+
+    </form>
+
+
+
+
+{% endblock %}}
