@@ -2,133 +2,134 @@
 
 {% block content %}
 
-
-    <div class="container-fluid" id="singleTracks">
-        <h1>{{ST.name}}</h1>
-        <h2>SingleTracks Results</h2>
-        <div class="DescriptionDiv">
-            <p class="lead">Description:</p> <p>{{ ST.description }}</p>
+    <div id="trailListings" class="container">
+        <div class="row-centered">
+            <h1 class="col-sm-9 col-centered lightColor bold" >{{ST.name}}</h1>
         </div>
-        <table class="table-condensed">
-            <tr class="tableHead">
-                <th>Trail Stats</th>
-            </tr>
-            <tr>
-                <td>Difficulty:</td>
-                <td>{{ ST.difficulty }}</td>
-            </tr>
-            <tr>
-                <td>Length (miles):</td>
-                <td> {{ ST.length }} </td>
-            </tr>
-            <tr>
-                <td>Rating:</td>
-                <td>{{ ST.rating }}</td>
-            </tr>
-        </table>
-        <a class="btn btn-default" href="{{ ST.url }}"> Think this webiste has the best info?! Click the link!</a>
+
+        <div class="row-centered">
+            <div id="weather" class="col-sm-7 col-centered accentBack">Weather stuff</div>
+        </div>
+
+        <div class="row row-centered">
+            <div class="col-md-3 col-centered accentColor">
+                <h2 class="lightColor bold">{{ST.name}}</h2>
+                <p class="greyColor">{{ ST.description }}</p>
+                <a class="greyColor viewmore">...</a>
+                <h3 class="statsTitle greyColor">Trail Stats</h3>
+                <ul>
+                    <li>Difficulty: {{ST.difficulty}}</li>
+                    <li>Length: {{ ST.length }}</li>
+                </ul>
+                <a class="greyColor viewmore">view more</a>
+                <a href="{{ ST.url }}" class="btn btn-default accentBack lightColor bold">SingleTracks</a>
+
+
+                <div class="moreInfo col-lg-12">
+                    <h2 class="lightColor bold">{{ST.name}}</h2>
+                    <p class="greyColor">{{ ST.description }}</p>
+                    <h3 class="statsTitle lightColor">Trail Stats</h3>
+                    <ul class="greyColor">
+                        <li>Difficulty: {{ST.difficulty}}</li>
+                        <li>Length: {{ ST.length }}</li>
+                    </ul>
+                </div>
+            </div>
+
+
+
+            {% if TF %}
+                {% for dict in TF %}
+                <div class="col-md-3 col-centered accentColor">
+                    <h2 class="lightColor bold">{{ dict.TFName }}</h2>
+                    <p class="greyColor">{{ dict.TFTDesc }}</p>
+                    <a class="greyColor viewmore">...</a>
+                    <h3 class="statsTitle greyColor">Trail Stats</h3>
+                    <ul>
+                        <li>Length: {{ dict.TFTDiff }}</li>
+                        <li>Length: {{ dict.TFTLength }}</li>
+                        <li>Length: {{ dict.TFTDescent }}</li>
+                        <li>Length: {{ dict.TFTClimb }}</li>
+                        <li>Length: {{ dict.TFTArea }}</li>
+                        <li>Length: {{ dict.TFTRepor }}</li>
+                    </ul>
+                    <a class="greyColor viewmore">view more</a>
+                    <a href="{{dict.url}}" class="btn btn-default accentBack lightColor bold">TrailForks</a>
+
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if MTBP %}
+                {% for dict in MTBP %}
+                <div class="col-md-3 col-centered accentColor">
+                    <h2 class="lightColor bold">{{ dict.MName }}</h2>
+                    <p class="greyColor">{{ dict.MDesc }}</p>
+                    <a class="greyColor viewmore">...</a>
+                    <h3 class="statsTitle greyColor">Trail Stats</h3>
+                    <ul>
+                        <li>Length: {{ dict.MLen }}}</li>
+                        <li>Length: {{ dict.MDescent }}</li>
+                        <li>Length: {{ dict.MAscent }}</li>
+                        <li>Length: {{ dict.MHelev }}</li>
+                        <li>Length: {{ dict.MLelev }}</li>
+                        <li>Length: {{ dict.MAGr }}</li>
+                        <li>Length: {{ dict.MMGr }}</li>
+                        <li>Length: {{ dict.MORgs }}</li>
+
+
+                    </ul>
+                    <a class="greyColor viewmore">view more</a>
+                    <a href="{{dict.url}}" class="btn btn-default accentBack lightColor bold">MTB Project</a>
+                    <div class="moreInfo col-lg-12">
+                        <h2 class="lightColor bold">{{ dict.MName }}</h2>
+                        <p class="greyColor">{{ dict.MDesc }}</p>
+                        <h3 class="statsTitle lightColor">Trail Stats</h3>
+                        <ul class="greyColor">
+                            <li>Length: {{ dict.MLen }}}</li>
+                            <li>Length: {{ dict.MDescent }}</li>
+                            <li>Length: {{ dict.MAscent }}</li>
+                            <li>Length: {{ dict.MHelev }}</li>
+                            <li>Length: {{ dict.MLelev }}</li>
+                            <li>Length: {{ dict.MAGr }}</li>
+                            <li>Length: {{ dict.MMGr }}</li>
+                            <li>Length: {{ dict.MORgs }}</li>
+
+
+                        </ul>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+            {% if TFA %}
+                {% for dict in TFA %}
+                <div class="col-md-3 col-centered accentColor">
+                    <h2 class="lightColor bold">{{ dict.Riding_Area }}</h2>
+                    <p class="greyColor">{{ dict.TFADesc }}</p>
+                    <a class="greyColor viewmore">...</a>
+                    <h3 class="statsTitle greyColor">Trail Stats</h3>
+                    <ul>
+                        <li>Length: {{ dict.TFADiff }}</li>
+                        <li>Length: {{ dict.TFALen }}</li>
+                        <li>Length: {{ dict.TFANum }}</li>
+                        <li>Length: {{ dict.TFAVert }}</li>
+                        <li>Length: {{ dict.TFAGroup }}</li>
+
+
+                    </ul>
+                    <a class="greyColor viewmore">view more</a>
+                    <a href="{{ dict.url }}" class="btn btn-default accentBack lightColor bold">TrailForks</a>
+
+                </div>
+                {% endfor %}
+            {% endif %}
+
+        </div>
     </div>
-    {% if TF %}
-        <div class="container-fluid" id="TrailForks">
-        <h2>TrailForks Results</h2>
-        {% for dict in TF %}
-        <div class="container-fluidS" id="Tftrail">
 
-            <h3>{{ dict.TFName }}</h3>
-            <div class="DescriptionDiv">
-                <p class="lead">Description:</p>
-                <p>{{ dict.TFTDesc }}</p>
-            </div>
-            <table class="table-condensed">
-                <tr class="tableHead">
-                    <th>Trail Stats</th>
-                </tr>
-                <tr>
-                    <td>Area:</td>
-                    <td>{{ dict.TFTArea }}</td>
-                </tr>
-                <tr>
-                    <td>Difficulty:</td>
-                    <td>{{ dict.TFTDiff }}</td>
-                </tr>
-                <tr>
-                    <td>Length:</td>
-                    <td>{{ dict.TFTLength }} </td>
-                </tr>
-                <tr>
-                    <td>Climb:</td>
-                    <td>{{ dict.TFTClimb }}</td>
-                </tr>
-                <tr>
-                    <td>Descent:</td>
-                    <td>{{ dict.TFTDescent }}</td>
-                </tr>
-                <tr>
-                    <td>Last Report:</td>
-                    <td>{{ dict.TFTRepor }}</td>
-                </tr>
 
-            </table>
-            <a class="btn btn-default" href="{{ dict.URL }}"> Think this webiste has the best info?! Click the link!</a>
-        </div>
-        {% endfor %}
-        </div>
-    {% endif %}
 
-    {% if MTBP %}
 
-        <div class="container-fluid" id="MtbProject">
-            <h2>MtbProject Results</h2>
-        {% for dict in MTBP %}
-            <div class="container-fluid" id="Mtrail">
-            <h3>{{ dict.MName }}</h3>
-            <div class="DescriptionDiv">
-                <p class="lead">Description: </p>
-                <p>{{ dict.MDesc }}</p>
-            </div>
-            <table class="table-condensed">
-                <tr class="tableHead">
-                    <th>Trail Stats</th>
-                </tr>
-                <tr>
-                    <td>Length:</td>
-                    <td>{{ dict.MLen }} </td>
-                </tr>
-                <tr>
-                    <td>Climb:</td>
-                    <td>{{ dict.MAscent }}</td>
-                </tr>
-                <tr>
-                    <td>Descent:</td>
-                    <td>{{ dict.MDescent }}</td>
-                </tr>
-                <tr>
-                    <td>Highest Elevation:</td>
-                    <td>{{ dict.MHelev }}</td>
-                </tr>
-                <tr>
-                    <td>Lowest Elevation:</td>
-                    <td>{{ dict.MLelev }}</td>
-                </tr>
-                <tr>
-                    <td>Average Grade:</td>
-                    <td>{{ dict.MAGr }}</td>
-                </tr>
-                <tr>
-                    <td>Max Grade:</td>
-                    <td>{{ dict.MMGr }}</td>
-                </tr>
-                <tr>
-                    <td>Maintaince Organizations:</td>
-                    <td>{{ dict.MORgs }}</td>
-                </tr>
-            </table>
-            <a class="btn btn-default" href="{{ dict.url }}"> Think this website has the best info?! Click the link!</a>
-
-            </div>
-        {% endfor %}
-        </div>
-    {% endif %}
 
     {% if TFA %}
         <div class="container-fluid" id="TrailForksArea">
@@ -173,5 +174,40 @@
     {% endif %}
 
 
+            <script>
 
+                (function(){
+                   var viewMoreButtons = document.getElementsByClassName("viewmore");
+                   for(var i = 0; i<viewMoreButtons.length; i++){
+                       viewMoreButtons[i].isShown = false;
+                       console.log(viewMoreButtons[i]);
+                       viewMoreButtons[i].onclick = function(e){
+                           var parent = this.parentNode;
+                           //console.log(parent)
+                           var moreInfo = parent.getElementsByClassName("moreInfo")[0];
+                           moreInfo.button = this;
+
+                           if(this.isShown){
+                               moreInfo.style.visibility = "hidden";
+                               moreInfo.style.opacity = 0;
+                           }
+                           else{
+                               moreInfo.style.visibility = "visible";
+                               moreInfo.style.opacity = 1;
+                           }
+                           this.isShown = !this.isShown;
+                       }
+                   }
+
+                   var moreInfos = document.getElementsByClassName("moreInfo");
+                    for(var x = 0; x<moreInfos.length; x++){
+                        moreInfos[x].onclick = function(){
+                            this.button.isShown = false;
+                            this.style.visibility = "hidden";
+                            this.style.opacity = 0;
+                        }
+                    }
+                })();
+
+            </script>
 {% endblock %}

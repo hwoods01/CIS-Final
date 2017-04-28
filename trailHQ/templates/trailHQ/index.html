@@ -1,28 +1,79 @@
-{% extends 'trailHQ/base.html' %}
+<html>
+    <head>
+        <title>Trail HQ</title>
+        {% load static %}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-{% block content %}
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-    <form class="form-inline" action="area" method="get">
-        <div class="form-group">
-            <label for="city">City:</label>
-            <input id="city" type="form-control" name="city" value="{{ city }}">
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <link href='{% static "styles/style.css" %}' type="text/css" rel="stylesheet">
+        <script src='{% static "javascript/classie.js" %}' type="text/javascript"></script>
+    </head>
+    <body>
+        <div id="search" class="site-wrapper">
+            <div class="site-wrapper-inner">
+                <div class="cover-container">
+                    <div class="inner cover">
+                        <form class="form-inline" action="area" method="get">
+                            <div class="col-md-6 col-centered">
+
+                                <input id="city" type="form-control" name="city" value="{{ city }}" required>
+                                <label for="city">City</label>
+                            </div>
+                            <div class="col-md-3 col-centered">
+
+                                <input id="state" type="form-control" name="state" value="{{ state }}" required>
+                                <label for="state">State</label>
+                            </div>
+
+                            <div class="col-md-3 col-centered">
+
+                                <input id="radius" type="number" name="radius" value="{{ radius }}" required>
+                                <label for="radius">Radius</label>
+                            </div>
+
+                            <button type="submit" class="accentBack lightColor btn btn-default" value="Find Trails">Find Trails</button>
+
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="state">State:</label>
-            <input id="state" type="form-control" name="state" value="{{ state }}">
-        </div>
-
-        <div class="form-group">
-            <label for="radius">Radius:</label>
-            <input id="radius" type="form-control" name="radius" value="{{ radius }}">
-        </div>
-
-        <button type="submit" class="btn btn-default" value="Find Trails">Find Trails! </button>
-
-
-    </form>
 
 
 
 
-{% endblock %}}
+        <script>
+            (function(){
+                [].slice.call( document.querySelectorAll( 'input' ) ).forEach( function( inputEl ) {
+                        // in case the input is already filled..
+
+                    if( inputEl.value.trim() !== '' ) {
+                        classie.add( inputEl, 'input--active' );
+                    }
+
+                    // events:
+                    inputEl.addEventListener( 'focus', onInputFocus );
+                    inputEl.addEventListener( 'blur', onInputBlur );
+				} );
+
+				function onInputFocus( ev ) {
+					classie.add( ev.target, 'input--active' );
+				}
+
+				function onInputBlur( ev ) {
+					if( ev.target.value.trim() === '' ) {
+						classie.remove( ev.target, 'input--active' );
+					}
+				}
+			})();
+        </script>
+
+
+    </body>
+</html>
