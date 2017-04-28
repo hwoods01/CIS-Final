@@ -5,18 +5,35 @@
     <div class="header">
         <h1>{{ area }}, {{ state }} </h1>
     </div>
-    <div class="weather">
-        {% for k in weather %}
+        <div class="row-centered">
+            <div id="weather" class="col-sm-7 col-centered accentBack">        {% for k in weather %}
             {{k}}
 
-        {%endfor%}
-    </div>
-    <h1> Made it here!</h1>
-    <table>
-        {% for dict in results %}
-        <div class="Trail">
+        {%endfor%}</div>
+        </div>
 
-            <table class="TrailResults">
+    <table class="TrailResults">
+        <thead><td></td><td>Trail Name</td><td>Length</td></thead>
+        {% for dict in results %}
+            <tr>
+                {% if dict.duplicates %}
+
+                    <td class="duplicate"> </td>
+                {% else %}
+                    <td > </td>
+                {% endif %}
+                <td ><a href="{% url 'trail_detail' pk=dict.key %}" class="greyColor">{{ dict.SingleTracks }}</td>
+                <td>LENGTH</td>
+            </tr>
+
+
+        {%endfor%}
+
+    </table>
+{% endblock %}
+
+<!--
+
 
                 <thead>{{dict.SingleTracks}}</thead>
 
@@ -60,12 +77,3 @@
                         <tr class="TASin"><td><a href="{% url 'trail_detail' pk=dictkey %}">{{dict.TFArea}}</td></tr>
                     {% endif %}
                 {% endif %}
-
-            </table>
-
-        </div>
-        {%endfor%}
-
-    </table>
-{% endblock %}
-

@@ -1,6 +1,18 @@
 body{
     background:#37474f;
+    font-family: 'Oswald', sans-serif;
+
 }
+
+input[type='number'] {
+    -moz-appearance:textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
 .table {
     width: 50%
 }
@@ -94,6 +106,8 @@ body{
 #trailListings h2{
     text-transform: capitalize ;
     min-height:66px;
+    max-height: 66px;
+overflow: hidden;
 }
 #trailListings .moreInfo{
     visibility: hidden;
@@ -199,13 +213,16 @@ body{
 #search .btn{
     display:inline-block;
     position:relative;
-    margin-top:50px;
-    width:200px;
+    margin-top:75px;
+    border-radius:70px;
+    width:240px;
+    padding:15px;
+    font-size:25px;
     left:0;
     font-weight:bold;
 }
 .btn.loading{
-    width:50px !important;
+    width:65px !important;
     transition:width .3s;
     background:url("../images/ring.gif");
     background-size:cover;
@@ -213,4 +230,76 @@ body{
     background-color:#00e676;
     overflow:hidden;
     color:#00e676;
+}
+
+
+
+.logo {
+    margin-left:40px;
+    z-index:2;
+
+    font-family: 'Permanent Marker', cursive;
+    color:#e8f5e9;
+    font-size:40px;
+    text-decoration:none;
+}
+.logo:hover, .logo:active{
+    text-decoration:none;
+    color:#e8f5e9;
+}
+.logo span{
+    color:#00e676;
+}
+
+#search .logo{
+
+    position:relative;
+    font-size:90px;
+    padding-bottom:40px;
+
+}
+
+
+
+
+.trailresults td:first-child{
+    width:35px;
+    height:35px;
+}
+.duplicate{
+
+    background:url("../images/warning.png");
+    background-size: 30px 30px;
+    background-position:50% 50%;
+}
+.trailresults td{
+    max-width:80px;
+    height:35px;
+
+}
+.trailresults td a{
+    text-decoration: none;
+    transition: color .3s;
+    cursor:pointer;
+}
+.trailresults td a:hover{
+    color:#00e676;
+}
+.trailresults tr{
+    border-bottom:1px solid #e8f5e9;
+    color:#90a4ae;
+}
+
+
+
+.trailresults{
+    width:80%;
+    margin-left:10%;
+}
+.trailresults thead{
+    border-bottom:4px solid #00e676;
+    font-size:20px;
+}
+.trailresults thead td{
+    padding:5px 0;
 }

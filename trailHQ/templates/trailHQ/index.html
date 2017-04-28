@@ -6,7 +6,7 @@
 
         <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
+        <link href="https://fonts.googleapis.com/css?family=Oswald|Permanent+Marker" rel="stylesheet">
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <link href='{% static "styles/style.css" %}' type="text/css" rel="stylesheet">
@@ -17,7 +17,8 @@
             <div class="site-wrapper-inner">
                 <div class="cover-container">
                     <div class="inner cover">
-                        <form class="form-inline" action="area" method="get">
+                        <div class="logo">Trail<span>HQ</span></div>
+                        <form id="mainForm" class="form-inline" action="area" method="get">
                             <div class="col-md-6 col-centered">
 
                                 <input id="city" type="form-control" name="city" value="{{ city }}" required>
@@ -35,7 +36,7 @@
                                 <label for="radius">Radius</label>
                             </div>
 
-                            <button type="submit" class="accentBack lightColor btn btn-default" value="Find Trails">Find Trails</button>
+                            <button id="submitButton" type="submit" class="accentBack lightColor btn btn-default" value="Find Trails">Find Trails</button>
 
 
                         </form>
@@ -71,6 +72,11 @@
 						classie.remove( ev.target, 'input--active' );
 					}
 				}
+
+				var submitBtn = document.getElementById("mainForm");
+				submitBtn.onsubmit = function(){
+				    classie.add(document.getElementById("submitButton"), "loading");
+                }
 			})();
         </script>
 
