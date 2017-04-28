@@ -49,16 +49,16 @@ def area(request):
         radius = form.cleaned_data['radius']
 
         area = "Crested Butte"
-        state = "Colorado"
+        #state = "Colorado"
 
         combined = []
-        results = tryFilter(area, state)
+        results = tryFilter(city, state)
 
         # no call has been made to that location yet
         if not results:
-            if STController(area, state):
-                matchController(area, state)
-                results = tryFilter(area, state)
+            if STController(city, state):
+                matchController(city, state)
+                results = tryFilter(city, state)
 
             # bad input
             else:
@@ -68,7 +68,7 @@ def area(request):
 
         weather = GetWeather(trail.latitude, trail.longitude)
         type = 'AreaResults'
-        results = makeQuery(type, [area, state])
+        results = makeQuery(type, [city, state])
 
         # TFRequest('https://www.trailforks.com/region/miller-s-meadow-12543/','area', id)
         # TFRequest('https://www.trailforks.com/trails/trail-401/', 'test', id)
