@@ -23,7 +23,7 @@
                     <td > </td>
                 {% endif %}
                 <td ><a href="{% url 'trail_detail' pk=dict.key %}" class="greyColor">{{ dict.SingleTracks }}</td>
-                <td>LENGTH</td>
+                <td>{{ dict.length }}</td>
             </tr>
 
 

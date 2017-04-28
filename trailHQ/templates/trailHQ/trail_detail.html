@@ -56,6 +56,20 @@
                     <a class="greyColor viewmore">view more</a>
                     <a href="{{dict.url}}" class="btn btn-default accentBack lightColor bold">TrailForks</a>
 
+                    <div class="moreInfo col-lg-12">
+                        <h2 class="lightColor bold">{{ dict.TFName }}</h2>
+                         <p class="statsTitle lightColor">{{ dict.TFTDesc }}</p>
+                        <h3 class="statsTitle greyColor">Trail Stats</h3>
+                        <ul>
+                            <li>Length: {{ dict.TFTDiff }}</li>
+                            <li>Length: {{ dict.TFTLength }}</li>
+                            <li>Length: {{ dict.TFTDescent }}</li>
+                            <li>Length: {{ dict.TFTClimb }}</li>
+                            <li>Length: {{ dict.TFTArea }}</li>
+                            <li>Length: {{ dict.TFTRepor }}</li>
+                        </ul>
+
+                    </div>
                 </div>
                 {% endfor %}
             {% endif %}
@@ -81,19 +95,20 @@
                     </ul>
                     <a class="greyColor viewmore">view more</a>
                     <a href="{{dict.url}}" class="btn btn-default accentBack lightColor bold">MTB Project</a>
+
                     <div class="moreInfo col-lg-12">
                         <h2 class="lightColor bold">{{ dict.MName }}</h2>
                         <p class="greyColor">{{ dict.MDesc }}</p>
                         <h3 class="statsTitle lightColor">Trail Stats</h3>
                         <ul class="greyColor">
                             <li>Length: {{ dict.MLen }}}</li>
-                            <li>Length: {{ dict.MDescent }}</li>
-                            <li>Length: {{ dict.MAscent }}</li>
-                            <li>Length: {{ dict.MHelev }}</li>
-                            <li>Length: {{ dict.MLelev }}</li>
-                            <li>Length: {{ dict.MAGr }}</li>
-                            <li>Length: {{ dict.MMGr }}</li>
-                            <li>Length: {{ dict.MORgs }}</li>
+                            <li>Descent: {{ dict.MDescent }}</li>
+                            <li>Ascent: {{ dict.MAscent }}</li>
+                            <li>High Elevation: {{ dict.MHelev }}</li>
+                            <li>Low Eleveation: {{ dict.MLelev }}</li>
+                            <li>Average Grade: {{ dict.MAGr }}</li>
+                            <li>Max Grade: {{ dict.MMGr }}</li>
+                            <li>Maintainers: {{ dict.MORgs }}</li>
 
 
                         </ul>
@@ -109,11 +124,11 @@
                     <a class="greyColor viewmore">...</a>
                     <h3 class="statsTitle greyColor">Trail Stats</h3>
                     <ul>
-                        <li>Length: {{ dict.TFADiff }}</li>
+                        <li>Difficulty: {{ dict.TFADiff }}</li>
                         <li>Length: {{ dict.TFALen }}</li>
-                        <li>Length: {{ dict.TFANum }}</li>
-                        <li>Length: {{ dict.TFAVert }}</li>
-                        <li>Length: {{ dict.TFAGroup }}</li>
+                        <li>Number of trails: {{ dict.TFANum }}</li>
+                        <li>Vertical Change: {{ dict.TFAVert }}</li>
+                        <li>Maintainers: {{ dict.TFAGroup }}</li>
 
 
                     </ul>
@@ -127,51 +142,6 @@
         </div>
     </div>
 
-
-
-
-
-    {% if TFA %}
-        <div class="container-fluid" id="TrailForksArea">
-            <h2>TrailForks Area Results</h2>
-        {% for dict in TFA %}
-        <div class="container-fluid" id="Tfatrail">
-
-            <h3>{{ dict.Riding_Area }}</h3>
-            <div class="DescriptionDiv">
-                <p class="lead">Description:</p>
-                <p>{{ dict.TFADesc }}</p>
-            </div>
-            <table class="table-condensed">
-                <tr class="tableHead">
-                    <th>Trail Group Stats</th>
-                </tr>
-                <tr>
-                    <td>Difficulty:</td>
-                    <td>{{ dict.TFADiff }}</td>
-                </tr>
-                <tr>
-                    <td>Length:</td>
-                    <td>{{ dict.TFALen }} </td>
-                </tr>
-                <tr>
-                    <td>Number of trails:</td>
-                    <td>{{ dict.TFANum }}</td>
-                </tr>
-                <tr>
-                    <td>Vertical Change:</td>
-                    <td{{ dict.TFAVert }}</td>
-                </tr>
-                <tr>
-                    <td>Maintainers:</td>
-                    <td>{{ dict.TFAGroup }}</td>
-                </tr>
-            </table>
-            <a class="btn btn-default" href="{{ dict.url }}"> Think this webiste has the best info?! Click the link!</a>
-        </div>
-        {% endfor %}
-        </div>
-    {% endif %}
 
 
             <script>
