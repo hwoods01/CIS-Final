@@ -18,11 +18,11 @@
             <tr>
                 {% if dict.duplicates %}
 
-                    <td class="duplicate"> </td>
+                <td class="duplicate"> </td>
                 {% else %}
                     <td > </td>
                 {% endif %}
-                <td ><a href="{% url 'trail_detail' pk=dict.key %}" class="greyColor">{{ dict.SingleTracks }}</td>
+                <td ><a href="{% url 'trail_detail' pk=dict.key %}" class="greyColor">{{ dict.SingleTracks }}</a></td>
                 <td>{{ dict.length }}</td>
             </tr>
 

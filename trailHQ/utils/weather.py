@@ -26,11 +26,7 @@ def decodeResults(response):
     friday = ""
     saturday = ""
     for day in weatherInfo:
-        if day["name"] == "Friday":
-            weatherDict["friday"] = [day["shortForecast"], day["temperature"], day["icon"]]
-        if day["name"] == "Saturday":
-            weatherDict["saturday"] = [day["shortForecast"], day["temperature"], day["icon"]]
-            break
+        weatherDict[day["name"]] = [day["shortForecast"], day["temperature"], day["icon"]]
 
     return weatherDict
 

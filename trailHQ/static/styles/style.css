@@ -150,8 +150,49 @@ overflow: hidden;
 #weather{
     height:75px;
     margin:10px 0;
+    cursor:pointer;
 }
+#weather .overlay{
+    content:"";
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    z-index:400;
+    background:rgba(0,0,0,.8);
+    opacity:0;
+    visibility:hidden;
+        transition:opacity .3s, visibility .3s;
+}
+#weather.active .overlay{
 
+    opacity:1;
+    visibility:visible;
+
+}
+#weather .overlay .row-centered{
+    margin-top:30%;
+
+}
+#weather h3{
+    position:absolute;
+    top:-5px;
+    left:55px;
+}
+#weather h3:after{
+    content:"\00b0 F"
+}
+.wi{
+    font-size:30px;
+    position:absolute;
+    top:15px;
+    left:15px;
+}
+#weather h4{
+    margin-top:50px;
+    margin-left:20px;
+}
 
 
 .site-wrapper{

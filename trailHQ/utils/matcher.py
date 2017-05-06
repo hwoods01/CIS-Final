@@ -105,6 +105,7 @@ def matchForks(searchNames, foundMatches, state):
                 tffound = Query('area', trail, state, 'multiple')
 
             mfound = Query('mtrail', trail, state, 'multiple')
+
         # there is just one dominant string which requires being handled a bit different
         else:
             tffound = Query('trail', trail, state, 'single')

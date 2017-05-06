@@ -32,8 +32,10 @@ def trail_detail(request, pk):
     TFresults = makeQuery("TFsing", [pk])
     TFAresults = makeQuery("TFAsing", [pk])
     MBresults = makeQuery("MBsing", [pk])
+    trail = Sresults[0]
+    weather = GetWeather(trail['latitude'], trail['longitude'])
 
-    return render(request, 'trailHQ/trail_detail.html', {'ST': Sresults[0], 'TF': TFresults, 'TFA': TFAresults, 'MTBP': MBresults})
+    return render(request, 'trailHQ/trail_detail.html', {'ST': Sresults[0], 'TF': TFresults, 'TFA': TFAresults, 'MTBP': MBresults, 'weather': weather})
 
 
 
