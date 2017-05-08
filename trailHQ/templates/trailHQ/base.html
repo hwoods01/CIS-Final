@@ -27,4 +27,15 @@
             <p>This is a footer.</p>
         </div>
     </footer>
+    <script>
+        var weather = document.getElementById('weather');
+        weather.onclick = function(){
+            if(this.classList.contains("active")){
+                this.classList.remove("active");
+            }
+            else{
+                this.classList.add("active");
+            }
+        }
+    </script>
     </body>

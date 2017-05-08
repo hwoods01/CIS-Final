@@ -2,34 +2,143 @@
 
 
 {% block content %}
-    <div class="header">
-        <h1>{{ area }}, {{ state }} </h1>
-    </div>
-        <div class="row-centered">
-            <div id="weather" class="col-sm-7 col-centered accentBack">        {% for k in weather %}
-            {{k}}
+<div class="header">
+    <h1>{{ area }}, {{ state }} </h1>
+</div>
+<div class="row-centered">
+    <div id="weather" class="col-sm-7 col-centered accentBack">
+        <div class="overlay">
+            <div class="container">
+                <div class="row-centered">
 
-        {%endfor%}</div>
+                    {% if weather.Today %}
+                    <div class="col-md-2 col-centered">
+                        <h4 class=lightColor>Today</h4>
+                        <div class="wi wi-day-sunny accentColor"></div>
+                        <h3 class="lightColor">{{weather.Today.1 }}</h3>
+                        <p class="lightColor">{{weather.Today.0}}</p>
+
+                    </div>
+                    {% endif %}
+                    {% if weather.Monday %}
+                    <div class="col-md-2 col-centered">
+                        <h4 class="lightColor">Monday</h4>
+                        <div class="wi wi-day-sunny accentColor"></div>
+                        <h3 class="lightColor">{{weather.Monday.1 }}</h3>
+                        <p class="lightColor">{{weather.Monday.0}}</p>
+
+                    </div>
+                    {% endif %}
+                    {% if weather.Tuesday %}
+                    <div class="col-md-2 col-centered">
+                        <h4 class="lightColor">Tuesday</h4>
+                        <div class="wi wi-day-sunny accentColor"></div>
+                        <h3 class="lightColor">{{weather.Tuesday.1 }}</h3>
+                        <p class="lightColor">{{weather.Tuesday.0}}</p>
+
+                    </div>
+                    {% endif %}
+                    {% if weather.Wednesday %}
+                    <div class="col-md-2 col-centered">
+                        <h4 class="lightColor">Wednesday</h4>
+                        <div class="wi wi-day-sunny accentColor"></div>
+                        <h3 class="lightColor">{{weather.Wednesday.1 }}</h3>
+                        <p class="lightColor">{{weather.Wednesday.0}}</p>
+
+                    </div>
+                    {% endif %}
+                    {% if weather.Thursday %}
+                    <div class="col-md-2 col-centered">
+                        <h4 class="lightColor">Thursday</h4>
+                        <div class="wi wi-day-sunny accentColor"></div>
+                        <h3 class="lightColor">{{weather.Thursday.1 }}</h3>
+                        <p class="lightColor">{{weather.Thursday.0}}</p>
+
+                    </div>
+                    {% endif %}
+                    {% if weather.Friday %}
+                    <div class="col-md-2 col-centered">
+                        <h4 class="lightColor">Friday</h4>
+                        <div class="wi wi-day-sunny accentColor"></div>
+                        <h3 class="lightColor">{{weather.Friday.1 }}</h3>
+                        <p class="lightColor">{{weather.Friday.0}}</p>
+
+                    </div>
+                    {% endif %}
+                    {% if weather.Saturday %}
+                    <div class="col-md-2 col-centered">
+                        <h4 class="lightColor">Saturday</h4>
+                        <div class="wi wi-day-sunny accentColor"></div>
+                        <h3 class="lightColor">{{weather.Saturday.1 }}</h3>
+                        <p class="lightColor">{{weather.Saturday.0}}</p>
+
+                    </div>
+                    {% endif %}
+                    {% if weather.Sunday %}
+                    <div class="col-md-2 col-centered">
+                        <h4 class="lightColor">Sunday</h4>
+                        <div class="wi wi-day-sunny accentColor"></div>
+                        <h3 class="lightColor">{{weather.Sunday.1 }}</h3>
+                        <p class="lightColor">{{weather.Sunday.0}}</p>
+
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
         </div>
-
-    <table class="TrailResults">
-        <thead><td></td><td>Trail Name</td><td>Length</td></thead>
-        {% for dict in results %}
-            <tr>
-                {% if dict.duplicates %}
-
-                <td class="duplicate"> </td>
-                {% else %}
-                    <td > </td>
-                {% endif %}
-                <td ><a href="{% url 'trail_detail' pk=dict.key %}" class="greyColor">{{ dict.SingleTracks }}</a></td>
-                <td>{{ dict.length }}</td>
-            </tr>
+        <div class="col-md-4">
+            <h4 class=darkColor>Today</h4>
 
 
-        {%endfor%}
+            <div class="wi wi-day-sunny"></div>
+            <h3>{{weather.Today.1 }}</h3>
 
-    </table>
+        </div>
+        {% if weather.Friday %}
+        <div class="col-md-4">
+            <h4 class=darkColor>Friday</h4>
+
+            <div class="wi wi-day-sunny"></div>
+            <h3>{{weather.Friday.1 }}</h3>
+
+        </div>
+        {% endif %}
+        {% if weather.Saturday %}
+        <div class="col-md-4">
+            <h4 class=darkColor>Satuday</h4>
+            <div class="wi wi-day-sunny"></div>
+            <h3>{{weather.Saturday.1 }}</h3>
+
+        </div>
+        {% endif %}
+    </div>
+
+
+</div>
+
+<table class="TrailResults">
+    <thead>
+    <td></td>
+    <td>Trail Name</td>
+    <td>Length</td>
+    </thead>
+    {% for dict in results %}
+    <tr>
+        {% if dict.duplicates %}
+
+        <td class="duplicate"></td>
+        {% else %}
+        <td></td>
+        {% endif %}
+        <td><a href="{% url 'trail_detail' pk=dict.key %}" class="greyColor">{{ dict.SingleTracks }}</a></td>
+        <td>{{ dict.length }}</td>
+    </tr>
+
+
+    {%endfor%}
+
+</table>
 {% endblock %}
 
 <!--

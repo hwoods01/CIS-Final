@@ -12,61 +12,94 @@
                 <div class="overlay">
                     <div class="container">
                         <div class="row-centered">
-                    <div class="col-md-2 col-centered">
-                        <h4 class =darkColor>Today</h4>
 
+                            {% if weather.Today %}
+                            <div class="col-md-2 col-centered">
+                                <h4 class=lightColor>Today</h4>
+                                <div class="wi wi-day-sunny accentColor"></div>
+                                <h3 class="lightColor">{{weather.Today.1 }}</h3>
+                                <p class="lightColor">{{weather.Today.0}}</p>
 
-                        <div class="wi wi-day-sunny"></div>
-                        <h3>72{{weather.Today.1 }}</h3>
+                            </div>
+                            {% endif %}
+                            {% if weather.Monday %}
+                            <div class="col-md-2 col-centered">
+                                <h4 class="lightColor">Monday</h4>
+                                <div class="wi wi-day-sunny accentColor"></div>
+                                <h3 class="lightColor">{{weather.Monday.1 }}</h3>
+                                <p class="lightColor">{{weather.Monday.0}}</p>
 
-                    </div>
-                                       <div class="col-md-2 col-centered">
-                        <h4 class =darkColor>Today</h4>
+                            </div>
+                            {% endif %}
+                            {% if weather.Tuesday %}
+                            <div class="col-md-2 col-centered">
+                                <h4 class="lightColor">Tuesday</h4>
+                                <div class="wi wi-day-sunny accentColor"></div>
+                                <h3 class="lightColor">{{weather.Tuesday.1 }}</h3>
+                                <p class="lightColor">{{weather.Tuesday.0}}</p>
 
+                            </div>
+                            {% endif %}
+                            {% if weather.Wednesday %}
+                            <div class="col-md-2 col-centered">
+                                <h4 class="lightColor">Wednesday</h4>
+                                <div class="wi wi-day-sunny accentColor"></div>
+                                <h3 class="lightColor">{{weather.Wednesday.1 }}</h3>
+                                <p class="lightColor">{{weather.Wednesday.0}}</p>
 
-                        <div class="wi wi-day-sunny"></div>
-                        <h3>72{{weather.Today.1 }}</h3>
+                            </div>
+                            {% endif %}
+                            {% if weather.Thursday %}
+                            <div class="col-md-2 col-centered">
+                                <h4 class="lightColor">Thursday</h4>
+                                <div class="wi wi-day-sunny accentColor"></div>
+                                <h3 class="lightColor">{{weather.Thursday.1 }}</h3>
+                                <p class="lightColor">{{weather.Thursday.0}}</p>
 
-                    </div>
-                                       <div class="col-md-2 col-centered" >
-                        <h4 class =darkColor>Today</h4>
+                            </div>
+                            {% endif %}
+                            {% if weather.Friday %}
+                            <div class="col-md-2 col-centered">
+                                <h4 class="lightColor">Friday</h4>
+                                <div class="wi wi-day-sunny accentColor"></div>
+                                <h3 class="lightColor">{{weather.Friday.1 }}</h3>
+                                <p class="lightColor">{{weather.Friday.0}}</p>
 
+                            </div>
+                            {% endif %}
+                            {% if weather.Saturday %}
+                            <div class="col-md-2 col-centered">
+                                <h4 class="lightColor">Saturday</h4>
+                                <div class="wi wi-day-sunny accentColor"></div>
+                                <h3 class="lightColor">{{weather.Saturday.1 }}</h3>
+                                <p class="lightColor">{{weather.Saturday.0}}</p>
 
-                        <div class="wi wi-day-sunny"></div>
-                        <h3>72{{weather.Today.1 }}</h3>
+                            </div>
+                            {% endif %}
+                            {% if weather.Sunday %}
+                            <div class="col-md-2 col-centered">
+                                <h4 class="lightColor">Sunday</h4>
+                                <div class="wi wi-day-sunny accentColor"></div>
+                                <h3 class="lightColor">{{weather.Sunday.1 }}</h3>
+                                <p class="lightColor">{{weather.Sunday.0}}</p>
 
-                    </div>
-                                       <div class="col-md-2 col-centered">
-                        <h4 class =darkColor>Today</h4>
+                            </div>
+                            {% endif %}
 
-
-                        <div class="wi wi-day-sunny"></div>
-                        <h3>72{{weather.Today.1 }}</h3>
-
-                    </div>
-                                       <div class="col-md-2 col-centered">
-                        <h4 class =darkColor>Today</h4>
-
-
-                        <div class="wi wi-day-sunny"></div>
-                        <h3>72{{weather.Today.1 }}</h3>
-
-                    </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <h4 class =darkColor>Today</h4>
+                    <h4 class=darkColor>Today</h4>
 
 
                     <div class="wi wi-day-sunny"></div>
-                    <h3>72{{weather.Today.1 }}</h3>
+                    <h3>{{weather.Today.1 }}</h3>
 
                 </div>
-
                 {% if weather.Friday %}
                 <div class="col-md-4">
-                    <h4 class =darkColor>Friday</h4>
+                    <h4 class=darkColor>Friday</h4>
 
                     <div class="wi wi-day-sunny"></div>
                     <h3>{{weather.Friday.1 }}</h3>
@@ -75,72 +108,15 @@
                 {% endif %}
                 {% if weather.Saturday %}
                 <div class="col-md-4">
-                    <h4 class =darkColor>Satuday</h4>
+                    <h4 class=darkColor>Satuday</h4>
                     <div class="wi wi-day-sunny"></div>
                     <h3>{{weather.Saturday.1 }}</h3>
 
                 </div>
                 {% endif %}
+            </div>
 
-                <a class="greyColor weatherViewMore">View More</a>
-                <div class="moreInfo col-lg-12">
-                    <h2 class="lightColor bold">Weekly Weather for: {{ST.name}}</h2>
-                    <h3 class="statsTitle lightColor">Weather</h3>
-                    <h3 class =lightColor>Monday</h3>
-                    <ul class="greyColor">
-                        <li>Forecast: {{weather.Today.0 }}</li>
-                        <li>Temperature: {{weather.Today.1 }}</li>
-                    </ul>
-                    {% if weather.Monday %}
-                    <h3 class =lightColor>Monday</h3>
-                    <ul class="greyColor">
-                        <li>Forecast: {{weather.Monday.0 }}</li>
-                        <li>Temperature: {{weather.Monday.1 }}</li>
-                    </ul>
-                    {% endif %}
-                    {% if weather.Tuesday %}
-                    <h3 class =lightColor>Tuesday</h3>
-                    <ul class="greyColor">
-                        <li>Forecast: {{weather.Tuesday.0 }}</li>
-                        <li>Temperature: {{weather.Tuesday.1 }}</li>
-                    </ul>
-                    {% endif %}
-                    {% if weather.Wednesday %}
-                    <h3 class =lightColor>Wednesday</h3>
-                    <ul class="greyColor">
-                        <li>Forecast: {{weather.Wednesday.0 }}</li>
-                        <li>Temperature: {{weather.Wednesday.1 }}</li>
-                    </ul>
-                    {% endif %}
-                    {% if weather.Thursday %}
-                    <h3 class =lightColor>Thursday</h3>
-                    <ul class="lightColor">
-                        <li>Forecast: {{weather.Thursday.0 }}</li>
-                        <li>Temperature: {{weather.Thursday.1 }}</li>
-                    </ul>
-                    {% endif %}
-                    {% if weather.Friday %}
-                    <h3 class =lightColor>Friday</h3>
-                    <ul class="greyColor">
-                        <li>Forecast: {{weather.Friday.0 }}</li>
-                        <li>Temperature: {{weather.Friday.1 }}</li>
-                    </ul>
-                    {% endif %}
-                    {% if weather.Saturday %}
-                    <h3 class =lightColor>Saturday</h3>
-                    <ul class="greyColor">
-                        <li>Forecast: {{weather.Saturday.0 }}</li>
-                        <li>Temperature: {{weather.Saturday.1 }}</li>
-                    </ul>
-                    {% endif %}
-                    {% if weather.Sunday %}
-                    <h3 class =lightColor>Sunday</h3>
-                    <ul class="greyColor">
-                        <li>Forecast: {{weather.Sunday.0 }}</li>
-                        <li>Temperature: {{weather.Sunday.1 }}</li>
-                    </ul>
-                    {% endif %}
-                </div>
+
         </div>
 
         <div class="row row-centered">
@@ -300,7 +276,6 @@
                            this.isShown = !this.isShown;
                        }
                    }
-
                    var moreInfos = document.getElementsByClassName("moreInfo");
                     for(var x = 0; x<moreInfos.length; x++){
                         moreInfos[x].onclick = function(){
@@ -309,15 +284,8 @@
                             this.style.opacity = 0;
                         }
                     }
-                    var weather = document.getElementById('weather');
-                    weather.onclick = function(){
-                        if(this.classList.contains("active")){
-                            this.classList.remove("active");
-                        }
-                        else{
-                            this.classList.add("active");
-                        }
-                    }
+
+
                 })();
 
             </script>
